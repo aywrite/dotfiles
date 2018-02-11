@@ -1,0 +1,183 @@
+" Autoinstall vim-plug {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.nvim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+" }}}
+
+call plug#begin('~/.vim/plugged')
+
+" general plugins
+Plug 'altercation/vim-colors-solarized'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'scrooloose/syntastic'
+Plug 'ervandew/supertab'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'AndrewRadev/splitjoin.vim'
+
+" language specific plugins
+"Plug 'davidhalter/jedi-vim'
+Plug 'fatih/vim-go'
+Plug 'itchyny/vim-haskell-indent'
+Plug 'rodjek/vim-puppet'
+Plug 'rust-lang/rust.vim'
+Plug 'solarnz/arcanist.vim' " syntax highlighting for arcanist
+Plug 'solarnz/thrift.vim'
+Plug 'kylef/apiblueprint.vim'
+Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
+Plug 'martinda/Jenkinsfile-vim-syntax'
+
+" --- language server ---
+set hidden
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly-2018-01-21-x86_64-apple-darwin', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ }
+" --- completion ---
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+call plug#end()
+" --- End Plugins ---
+
+" line numbering
+set number
+
+" turn on syntax highlighting
+syntax on
+syntax enable
+
+" turn on spell checking
+:setlocal spell
+:setlocal spell spelllang=en_us
+
+" remap jk to esc
+:inoremap jk <Esc>
+
+" remap arrow keys to nothing in normal mode
+:noremap <Up> <nop>
+:noremap <Down> <nop>
+:noremap <Left> <nop>
+:noremap <Right> <nop>
+
+" remap leader
+let mapleader = ","
+
+" use fzf as ctl-p
+nnoremap <silent> <C-p> :Files<CR>
+
+" vim theme (used with altercation/vim-colors-solarized)
+set background=dark
+colorscheme solarized
+let g:solarized_termcolors=256
+
+" subtle highlight for matching brackets
+highlight MatchParen cterm=bold ctermbg=none ctermfg=blue
+
+" Airlines theme (vim-airline)
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+
+" enable backspace/delete (mac)
+set backspace=indent,eol,start
+
+" Syntastic settings
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_enable_signs          = 1
+let g:syntastic_enable_highlighting   = 1
+let g:syntastic_cpp_check_header      = 1
+let g:syntastic_enable_balloons       = 1
+let g:syntastic_echo_current_error    = 1
+let g:syntastic_check_on_open         = 1
+let g:syntastic_check_on_wq           = 0
+let g:syntastic_error_symbol          = 'X'
+let g:syntastic_warning_symbol        = '>'
+let g:syntastic_style_error_symbol    = 'X'
+let g:syntastic_style_warning_symbol  = '>'
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+
+" ------ Python Settings ------
+" don't show the documentation window during jedi completion
+autocmd FileType python setlocal completeopt-=preview
+let g:jedi#show_call_signatures = "2"
+
+" python syntax highlighting
+let python_highlight_all=1
+autocmd FileType python set tabstop=4
+autocmd FileType python set softtabstop=4
+autocmd FileType python set shiftwidth=4
+autocmd FileType python set textwidth=79
+autocmd FileType python set expandtab
+autocmd FileType python set autoindent
+autocmd FileType python set fileformat=unix
+
+" ------ PHP Settings ------
+
+autocmd FileType php set tabstop=4
+autocmd FileType php set softtabstop=4
+autocmd FileType php set shiftwidth=4
+autocmd FileType php set expandtab
+autocmd FileType php set autoindent
+"
+" ------ JS Settings ------
+
+autocmd FileType javascript set tabstop=2
+autocmd FileType javascript set softtabstop=2
+autocmd FileType javascript set shiftwidth=2
+autocmd FileType javascript set expandtab
+autocmd FileType javascript set autoindent
+
+
+" ------ API blueprint (.apib) settings
+autocmd FileType apiblueprint set expandtab
+autocmd FileType apiblueprint set tabstop=4
+autocmd FileType apiblueprint set softtabstop=4
+autocmd FileType apiblueprint set shiftwidth=4
+
+" ------ Rust-lang Settings ------
+au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
+au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
+"nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+au FileType rust let g:syntastic_rust_checkers = ['rustc', 'clippy']
+let g:rustfmt_autosave = 1
+let g:racer_cmd = "/Users/andrewwright/.cargo/bin/racer"
+
+" ------ Go-lang Settings ------
+autocmd BufNewFile,BufRead *.go.tmpl set filetype=go
+
+autocmd FileType go nmap <leader>b <Plug>(go-build)
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>g <Plug>(go-def)
+autocmd FileType go nmap <leader>l <Plug>(go-metalinter)
+autocmd FileType go nmap <leader>d <Plug>(go-doc)
+
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_fmt_command = "goimports"
+
+au BufNewFile,BufRead *.go,*.go.gotmpl setlocal noet ts=4 sw=4 sts=4

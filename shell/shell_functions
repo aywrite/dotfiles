@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# find shorthand
+function f() {
+  find . -name "$1" 2>&1 | grep -v 'Permission denied'
+}
+
+# copy a file/dir recursively to ~/backups prompting for overwrites
+backup() {
+  cp -rvi $1 ~/backups/
+}
+
+# like cd but fuzzy
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# AWS commands
+# requires yawsi (go get github.com/amitsaha/yawsi)
+
+# AWS SSH searchable by tags
+aws-ssh() {
+  dns=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0 | awk '{print $7}') && ssh awright@$dns
+}
+
+aws-ssh-rest_app() {
+  dns=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:rest_app,rest_app_service:$2" | fzf --exit-0 | awk '{print $7}') && ssh $dns
+}
+
+# SSH directly to an instance
+sshi() {
+  dns=$(AWS_PROFILE=$1 yawsi ec2 | grep $2 | awk '{print $7}') && ssh $dns
+}
+
+# launch more instances like the selected one
+aws-launch-more() {
+  id=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0 | awk '{print $1}') && AWS_PROFILE=$1 yawsi ec2 launch-more-like $id --edit-user-data
+}
+
+aws-set-instance-protection() {
+  asg=$(AWS_PROFILE=$1 yawsi ec2 list-asgs | fzf --exit-0 | awk '{print $1}')
+  instance_id=$(AWS_PROFILE=$1 yawsi ec2 --asg $asg | fzf --exit-0 | awk '{print $1}')
+  AWS_PROFILE=$1 aws autoscaling set-instance-protection  --instance-ids $instance_id --auto-scaling-group-name $asg --protected-from-scale-in
+}
+
+aws-unset-instance-protection() {
+  asg=$(AWS_PROFILE=$1 yawsi ec2 list-asgs | fzf --exit-0 | awk '{print $1}')
+  instance_id=$(AWS_PROFILE=$1 yawsi ec2 --asg $asg | fzf --exit-0 | awk '{print $1}')
+  AWS_PROFILE=$1 aws autoscaling set-instance-protection  --instance-ids $instance_id --auto-scaling-group-name $asg --no-protected-from-scale-in
+}
+
+aws-show-instance-protection() {
+  asg=$(AWS_PROFILE=$1 yawsi ec2 list-asgs | fzf --exit-0 | awk '{print $1}')
+  AWS_PROFILE=$1 yawsi ec2 --asg $asg
+}
+
+aws-show-autoscaling-activity() {
+   asg=$(AWS_PROFILE=$1 yawsi ec2 list-asgs | fzf --exit-0 | awk '{print $1}')
+   AWS_PROFILE=$1 aws autoscaling describe-scaling-activities --auto-scaling-group-name $asg --max-items=2
+}

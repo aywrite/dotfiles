@@ -1,0 +1,8 @@
+*.cache
+node_modules
+atom/.apm
+vim/autoload
+vim/plugged
+vim/.netrwhist
+chrome
+webstorm/settings.jar
