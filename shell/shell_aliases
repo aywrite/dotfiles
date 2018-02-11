@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#! /usr/bin/env zsh
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -13,49 +12,6 @@ alias vim="nvim"
 alias vi="nvim"
 # fuzzy search for file and open in vim
 alias vf="vim \$(fzf)"
-
-#
-# Time to upgrade `ls`
-#
-
-# Use coreutils `ls` if possible
-hash gls >/dev/null 2>&1 || alias gls="ls"
-
-# Always use color output for `ls`
-# Detect which `ls` flavor is in use
-if gls --color > /dev/null 2>&1; then # GNU `ls`
-  colorflag="--color"
-else # OS X `ls`
-  colorflag="-G"
-fi
-
-export CLICOLOR_FORCE=1
-
-# ls options: F = put `/` after folders
-alias ls='ls -F ${colorflag} --group-directories-first'
-
-# Copy my public key to the pasteboard
-alias pubkey="more ~/.ssh/id_rsa.pub | pbcopy | printf '=> Public key copied to pasteboard.\n'"
-
-#
-# GIT STUFF
-#
-
-# List git branches on the local machine sorted by recent updates, adding a star to remote tracking branches
-function git_list_branches() {
-  RED="\e[91m";
-  for branch in $(git branch | sed s/^..//); do
-    time_ago=$(git log -1 --pretty=format:"%Cgreen%ci %Cblue%cr%Creset" $branch --);
-    # Add a red star to mark branches that are tracking something upstream
-    tracks_upstream=$(if [ "$(git rev-parse $branch@{upstream} 2>/dev/null)" ]; then printf "$RED★"; fi);
-    printf "%-53s - %s %s\n" $time_ago $branch $tracks_upstream;
-  done | sort;
-}
-
-# Git aliases
-
-# `cd` to Git repo root
-alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
 
 # Recursively delete `.DS_Store` files
 alias cleanup_dsstore="find . -name '*.DS_Store' -type f -ls -delete"
@@ -76,7 +32,7 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 
 # zshrc config
-alias zshrc="${EDITOR} ${$(cd -P $(dirname $0) && cd ..; pwd -P)}"
+alias zshrc="${EDITOR} ~/.zshrc"
 alias reload="source ~/.zshrc && echo 'Shell config reloaded from ~/.zshrc'"
 
 # zsh.local config

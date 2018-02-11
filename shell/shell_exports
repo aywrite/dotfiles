@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /usr/bin/env zsh
 
 # Defaults
 export SHELL=/bin/zsh

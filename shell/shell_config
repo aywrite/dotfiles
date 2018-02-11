@@ -1,13 +1,19 @@
-#!/bin/bash
+#! /usr/bin/env zsh
 
 # History
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
-setopt inc_append_history # Append history as commands are executed
-setopt hist_ignore_all_dups # Don't save duplicates
-unsetopt share_history # Disable sharing history between terminals (sessions)
+# Append history as commands are executed
+setopt inc_append_history
+
+# Don't save duplicates
+setopt hist_ignore_all_dups
+
+# Disable sharing history between terminals (sessions)
+unsetopt share_history
 
 # Expansion and Globbing
-setopt extended_glob # treat #, ~, and ^ as part of patterns for filename generation
+# treat #, ~, and ^ as part of patterns for filename generation
+setopt extended_glob

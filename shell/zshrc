@@ -41,9 +41,6 @@ export PATH
 # time that oh-my-zsh is loaded.
 ZSH_THEME="nick"
 
-# Z beats cd most of the time
-. ~/z/z.sh
-
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
