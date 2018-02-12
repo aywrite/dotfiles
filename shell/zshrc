@@ -72,6 +72,7 @@ plugins=(git zsh-syntax-highlighting)
 
 # User configuration
 
+
 # Load the shell dotfiles
 for file in $HOME/.{shell_exports,shell_aliases,shell_functions,shell_config}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
@@ -88,6 +89,5 @@ source $ZSH/oh-my-zsh.sh
 # Source local extra (private) settings specific to machine if it exists
 [ -f ~/.zsh.local ] && source ~/.zsh.local
 
-# npm tab completion
-. <(npm completion)
-
+# load virtualenvwrapper script
+source /usr/local/bin/virtualenvwrapper.sh
