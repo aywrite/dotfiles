@@ -32,6 +32,7 @@ Plug 'solarnz/thrift.vim'
 Plug 'kylef/apiblueprint.vim'
 Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
 Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'cespare/vim-toml'
 
 " --- language server ---
 set hidden
@@ -155,6 +156,13 @@ autocmd FileType apiblueprint set expandtab
 autocmd FileType apiblueprint set tabstop=4
 autocmd FileType apiblueprint set softtabstop=4
 autocmd FileType apiblueprint set shiftwidth=4
+
+" ------ toml (.toml) settings
+autocmd FileType toml set expandtab
+autocmd FileType toml set autoindent
+autocmd FileType toml set tabstop=2
+autocmd FileType toml set softtabstop=2
+autocmd FileType toml set shiftwidth=2
 
 " ------ Rust-lang Settings ------
 au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
