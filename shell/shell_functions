@@ -16,6 +16,12 @@ fd() {
   cd "$dir"
 }
 
+# find files matching $1 and replace all $1 with $2 making backups of changed files (.back)
+# forward slashed must be escaped.
+ag-replace() {
+  ag $1 --files-with-matches | xargs -I {} sed -i '.back' -e "s/$1/$2/g" {}
+}
+
 # AWS commands
 # requires yawsi (go get github.com/amitsaha/yawsi)
 
