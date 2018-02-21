@@ -1,0 +1,5 @@
+[user]
+	email = awright@freelancer.com
+	name = awright
+[url "git@git.freelancer.com:"]
+	insteadOf = https://git.freelancer.com/
