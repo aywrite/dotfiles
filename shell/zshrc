@@ -11,14 +11,16 @@ dirs_to_prepend=(
   "/usr/local/"
   "/usr/local/mysql/bin"
   "$HOME/dotfiles/bin"
-  "$(brew --prefix ruby)/bin"
-  "$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
-  "$(brew --prefix)/share/npm/bin" # Add npm-installed package bin
   "$HOME/go/bin" # go binaries
   "$HOME/.cargo/bin" # rust binaries
   "$HOME/work/arcanist/arcanist/bin"
   "/usr/local/opt/bison/bin"
 )
+
+# These are slow, might be useful later though
+#"$(brew --prefix ruby)/bin"
+#"$(brew --prefix coreutils)/libexec/gnubin" # Add brew-installed GNU core utilities bin
+#"$(brew --prefix)/share/npm/bin" # Add npm-installed package bin
 
 # Explicitly configured $PATH
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"

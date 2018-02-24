@@ -114,7 +114,7 @@ prompt_status() {
 }
 
 function battery_charge {
-  echo `~/bin/batcharge.py`
+  echo `batcharge`
 }
 
 ## Main prompt
