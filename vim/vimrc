@@ -189,3 +189,6 @@ let g:go_highlight_methods = 1
 let g:go_fmt_command = "goimports"
 
 au BufNewFile,BufRead *.go,*.go.gotmpl setlocal noet ts=4 sw=4 sts=4
+
+" crontab settings
+autocmd filetype crontab setlocal nobackup nowritebackup
