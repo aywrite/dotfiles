@@ -41,7 +41,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly-2018-01-21-x86_64-apple-darwin', 'rls'],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ }
@@ -164,9 +164,20 @@ autocmd FileType toml set tabstop=2
 autocmd FileType toml set softtabstop=2
 autocmd FileType toml set shiftwidth=2
 
+" ------ c++ (.cpp) settings
+autocmd FileType cpp set expandtab
+autocmd FileType cpp set autoindent
+autocmd FileType cpp set tabstop=2
+autocmd FileType cpp set softtabstop=2
+autocmd FileType cpp set shiftwidth=2
+
 " ------ Rust-lang Settings ------
 au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
 au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
+au FileType rust nmap <leader>b :!cargo build<CR>
+au FileType rust nmap <leader>r :!cargo run<CR>
+au FileType rust nmap <leader>c :!cargo check<CR>
+
 "nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 au FileType rust let g:syntastic_rust_checkers = ['rustc', 'clippy']
 let g:rustfmt_autosave = 1
