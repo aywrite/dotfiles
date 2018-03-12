@@ -1,6 +1,8 @@
 # Andrew Wright's Dotfiles
 
-Modified from Nick Plekhanov's Dotfiles
+Modified from [Nick Plekhanov's Dotfiles](https://github.com/nicksp/dotfiles)
+
+TODO/NOTE: I am currently in the process of updating the readme to reflect the differences from Nick's dotfiles, please take everything below with a grain of salt.
 
 This is a collection of dotfiles and scripts I use for customizing OS X to my liking and setting up the software development tools I use on a day-to-day basis. They should be cloned to your home directory so that the path is `~/dotfiles/`.  The included setup script creates symlinks from your home directory to the files which are located in `~/dotfiles/`.
 
