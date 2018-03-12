@@ -297,6 +297,7 @@ install_zsh
 
 # Install Zsh settings
 ln -s ~/dotfiles/zsh/themes/nick.zsh-theme $HOME/.oh-my-zsh/themes
+ln -s ~/dotfiles/zsh/themes/andrew.zsh-theme $HOME/.oh-my-zsh/themes
 
 ###############################################################################
 # Terminal & iTerm 2                                                          #
