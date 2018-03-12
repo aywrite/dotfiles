@@ -27,7 +27,7 @@ Plug 'fatih/vim-go'
 Plug 'itchyny/vim-haskell-indent'
 Plug 'rodjek/vim-puppet'
 Plug 'rust-lang/rust.vim'
-Plug 'solarnz/arcanist.vim' " syntax highlighting for arcanist
+Plug 'solarnz/arcanist.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'kylef/apiblueprint.vim'
 Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
@@ -141,14 +141,20 @@ autocmd FileType php set softtabstop=4
 autocmd FileType php set shiftwidth=4
 autocmd FileType php set expandtab
 autocmd FileType php set autoindent
-"
-" ------ JS Settings ------
 
+" ------ JS Settings ------
 autocmd FileType javascript set tabstop=2
 autocmd FileType javascript set softtabstop=2
 autocmd FileType javascript set shiftwidth=2
 autocmd FileType javascript set expandtab
 autocmd FileType javascript set autoindent
+
+" ------ Jenkinsfile Settings ------
+autocmd FileType Jenkinsfile set tabstop=2
+autocmd FileType Jenkinsfile set softtabstop=2
+autocmd FileType Jenkinsfile set shiftwidth=2
+autocmd FileType Jenkinsfile set expandtab
+autocmd FileType Jenkinsfile set autoindent
 
 
 " ------ API blueprint (.apib) settings
@@ -183,7 +189,8 @@ au FileType rust let g:syntastic_rust_checkers = ['rustc', 'clippy']
 let g:rustfmt_autosave = 1
 let g:racer_cmd = "/Users/andrewwright/.cargo/bin/racer"
 
-" ------ Go-lang Settings ------
+" ------ go-lang Settings ------
+" treat .go.tmpl files as go files
 autocmd BufNewFile,BufRead *.go.tmpl set filetype=go
 
 autocmd FileType go nmap <leader>b <Plug>(go-build)
@@ -201,5 +208,5 @@ let g:go_fmt_command = "goimports"
 
 au BufNewFile,BufRead *.go,*.go.gotmpl setlocal noet ts=4 sw=4 sts=4
 
-" crontab settings
+" ------ crontab Settings ------
 autocmd filetype crontab setlocal nobackup nowritebackup
