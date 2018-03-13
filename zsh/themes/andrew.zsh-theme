@@ -126,4 +126,4 @@ build_prompt() {
 RPROMPT='$(prompt_online) $(battery_charge)'
 
 PROMPT='%{%f%b%k%}$(build_prompt)
-» '
+𝝺 '
