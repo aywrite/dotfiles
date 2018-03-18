@@ -236,7 +236,7 @@ main() {
   for i in ${CONF_DIRS_TO_SYMLINK[@]}; do
 
     sourceFile="$(pwd)/config/$i"
-    targetFile="$HOME/.config/$i"
+    targetFile="$HOME/.config/$(printf "%s" "$i" | sed "s/.*\/\(.*\)/\1/g")"
 
     if [ ! -e "$targetFile" ]; then
       execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
