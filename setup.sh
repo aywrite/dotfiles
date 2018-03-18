@@ -149,6 +149,7 @@ DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Create dotfiles_old in homedir
 echo -n "Creating $dir_backup for backup of any existing dotfiles in ~..."
 mkdir -p $dir_backup
+mkdir -p $dir_backup/config
 echo "done"
 
 # Change to the dotfiles directory
@@ -160,16 +161,13 @@ echo "done"
 # Actual symlink stuff
 #
 
-
 # vim editor settings
 echo -n "Copying vim settings.."
 mv -f ~/.vim ~/dotfiles_old/
 ln -s $HOME/dotfiles/vim ~/.vim
 echo "done"
 
-
 declare -a FILES_TO_SYMLINK=(
-
   'shell/shell_aliases'
   'shell/shell_config'
   'shell/shell_exports'
@@ -181,16 +179,22 @@ declare -a FILES_TO_SYMLINK=(
   'git/gitattributes'
   'git/gitconfig'
   'git/gitignore'
-
 )
 
-# FILES_TO_SYMLINK="$FILES_TO_SYMLINK .vim bin" # add in vim and the binaries
+declare -a CONF_DIRS_TO_SYMLINK=(
+  'alacritty'
+  'nvim'
+)
 
 # Move any existing dotfiles in homedir to dotfiles_old directory, then create symlinks from the homedir to any files in the ~/dotfiles directory specified in $files
 
 for i in ${FILES_TO_SYMLINK[@]}; do
   echo "Moving any existing dotfiles from ~ to $dir_backup"
   mv ~/.${i##*/} ~/dotfiles_old/
+done
+
+for i in ${CONF_DIRS_TO_SYMLINK[@]}; do
+  mv ~/.config/${i##*/} ~/dotfiles_old/config/
 done
 
 
@@ -226,6 +230,31 @@ main() {
   done
 
   unset FILES_TO_SYMLINK
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  for i in ${CONF_DIRS_TO_SYMLINK[@]}; do
+
+    sourceFile="$(pwd)/config/$i"
+    targetFile="$HOME/.config/$i"
+
+    if [ ! -e "$targetFile" ]; then
+      execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
+    elif [ "$(readlink "$targetFile")" == "$sourceFile" ]; then
+      print_success "$targetFile → $sourceFile"
+    else
+      ask_for_confirmation "'$targetFile' already exists, do you want to overwrite it?"
+      if answer_is_yes; then
+        rm -rf "$targetFile"
+        execute "ln -fs $sourceFile $targetFile" "$targetFile → $sourceFile"
+      else
+        print_error "$targetFile → $sourceFile"
+      fi
+    fi
+
+  done
+
+  unset CONF_DIRS_TO_SYMLINK
 
   # Copy binaries
   ln -fs $HOME/dotfiles/bin $HOME
