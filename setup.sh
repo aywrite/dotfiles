@@ -167,6 +167,9 @@ mv -f ~/.vim ~/dotfiles_old/
 ln -s $HOME/dotfiles/vim ~/.vim
 echo "done"
 
+mv -f ~/.xmonad ~/dotfiles_old/
+ln -s $HOME/dotfiles/xmonad ~/.xmonad
+
 declare -a FILES_TO_SYMLINK=(
   'shell/shell_aliases'
   'shell/shell_config'
