@@ -9,11 +9,13 @@ dirs_to_prepend=(
   "/usr/local/sbin"
   "/usr/local/git/bin"
   "/usr/local/"
+  "/usr/lib/go-1.10/bin"
   "/usr/local/mysql/bin"
   "$HOME/dotfiles/bin"
   "$HOME/go/bin" # go binaries
   "$HOME/.cargo/bin" # rust binaries
   "$HOME/work/arcanist/arcanist/bin"
+  "$HOME/tools/arcanist/bin"
   "/usr/local/opt/bison/bin"
 )
 
@@ -93,3 +95,9 @@ source $ZSH/oh-my-zsh.sh
 
 # load virtualenvwrapper script
 source /usr/local/bin/virtualenvwrapper.sh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
