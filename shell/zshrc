@@ -11,6 +11,7 @@ dirs_to_prepend=(
   "/usr/local/"
   "/usr/lib/go-1.10/bin"
   "/usr/local/mysql/bin"
+  "$HOME/.local/bin"
   "$HOME/dotfiles/bin"
   "$HOME/go/bin" # go binaries
   "$HOME/.cargo/bin" # rust binaries
