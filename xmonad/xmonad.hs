@@ -20,7 +20,7 @@ main = do
             $dynamicProjects projects
             $myConfig
 
-myAltTerminal       = "xterm"
+myAltTerminal       = "gnome-terminal"
 myBrowser           = "google-chrome"
 myLauncher          = "rofi -show run"
 myLockScreen        = "i3lock"
