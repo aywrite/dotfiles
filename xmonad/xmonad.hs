@@ -10,8 +10,11 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run
 import XMonad.Util.Run(spawnPipe)
+--
+-- not sure if these do anything yet
 import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
 import XMonad.Layout.PerWorkspace           -- Configure layouts on a per-workspace 
+
 -- The main function.
 main = do
         xmproc <- spawnPipe myStatusBar
@@ -20,6 +23,7 @@ main = do
             $dynamicProjects projects
             $myConfig
 
+-- My Config Params
 myAltTerminal       = "gnome-terminal"
 myBrowser           = "google-chrome"
 myLauncher          = "rofi -show run"
@@ -29,14 +33,12 @@ myStartupScript     = "/home/andrewwright/.xmonad/startup.sh"
 myStatusBar         = "xmobar"
 myTerminal          = "alacritty"
 
+-- Colors
 xmobarTitleColor = "#429942"
 xmobarCurrentWorkspaceColor = "#429942"
 
 -- Custom PP, configure it as you like. It determines what is being written to the bar.
 --myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
-
--- Key binding to toggle the gap for the bar.
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 -- Main configuration, override the defaults to your liking.
 myConfig = defaultConfig
@@ -53,6 +55,13 @@ myConfig = defaultConfig
 	`additionalKeys` myAdditionalKeys
 
 
+------------------------------------------------------------------------}}}
+-- Keybindings                                                           {{{
+---------------------------------------------------------------------------
+
+-- Key binding to toggle the gap for the bar.
+toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+
 myAdditionalKeys = [
 		((mod4Mask .|. shiftMask, xK_p), spawn myLauncher)
 	,	((mod4Mask .|. shiftMask, xK_z), spawn myAltTerminal)
@@ -64,24 +73,24 @@ myAdditionalKeys = [
 -- Workspaces                                                           {{{
 ---------------------------------------------------------------------------
 
-wsAV    = "AV"
-wsBSA   = "BSA"
-wsCOM   = "COM"
-wsDOM   = "DOM"
+wsAV     = "AV"
+wsBSA    = "BSA"
+wsCHAT   = "CHAT"
+wsCOM    = "COM"
+wsDOM    = "DOM"
+wsGCC    = "GCC"
+wsGEN    = "GEN"
+wsGGC    = "GGC"
+wsMON    = "MON"
+wsOSS    = "OSS"
+wsRAD    = "RAD"
+wsRW     = "RW"
+wsTMP    = "TMP"
 wsWRKB   = "WRKB"
-wsGEN   = "GEN"
-wsGCC   = "GCC"
-wsMON   = "MON"
-wsOSS   = "OSS"
-wsRAD   = "RAD"
-wsRW    = "RW"
-wsWRKT  = "WRKT"
-wsTMP   = "TMP"
-wsVIX   = "VIX"
-wsGGC   = "GGC"
+wsWRKT   = "WRKT"
 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = [wsGEN, wsWRKB, wsWRKT, wsMON, wsRW, wsTMP]
+myWorkspaces = [wsGEN, wsWRKB, wsWRKT, wsCHAT, wsRW, wsTMP]
 
 projects :: [Project]
 projects =
@@ -92,7 +101,7 @@ projects =
                 }
 
     , Project   { projectName       = wsWRKT
-                , projectDirectory  = "~/"
+                , projectDirectory  = "~/freelancer-dev"
                 , projectStartHook  = Just $ do spawnOn wsWRKT myTerminal
                 }
 
@@ -101,10 +110,9 @@ projects =
                 , projectStartHook  = Just $ do spawnOn wsWRKB myBrowser
                 }
 
-    , Project   { projectName       = wsVIX
-                , projectDirectory  = "~/.xmonad"
-                , projectStartHook  = Just $ do spawnOn wsVIX myTerminal
-                                                spawnOn wsVIX myTerminal
+    , Project   { projectName       = wsCHAT
+                , projectDirectory  = "~/"
+                , projectStartHook  = Just $ do spawnOn wsCHAT myBrowser
                 }
 
     , Project   { projectName       = wsMON
