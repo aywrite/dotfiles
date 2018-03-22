@@ -150,7 +150,7 @@ projects =
                 }
     ]
 
--- Custom PP, configure it as you like. It determines what is being written to the bar.
+-- Custom PP, determines what is being written to xmobar.
 myLogHook h = dynamicLogWithPP $ def 
 
         { ppCurrent             = xmobarColor active "" . wrap "[" "]"
@@ -165,9 +165,3 @@ myLogHook h = dynamicLogWithPP $ def
         , ppOrder               = id
         , ppOutput              = hPutStrLn h  
 	}
-
-	--	{ ppCurrent = xmobarColor "#F29942" "" . wrap "<" ">"
-	--	, ppTitle   = xmobarColor xmobarTitleColor "" . shorten 100
-        --  	, ppSep     = "|"
-	--        , ppOutput  = hPutStrLn h
- 	--	}
