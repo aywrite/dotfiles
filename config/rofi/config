@@ -1,28 +1,31 @@
+rofi.width:                          100
+rofi.lines:                          7
+rofi.columns:                        1
+rofi.font:                           Source Code Pro 22
+
+! "Color scheme for normal row" Set from: Default
+rofi.color-window: #002b37, #002b37, #003642
+rofi.color-normal: #002b37, #819396, #002b37, #003642, #819396
+rofi.color-active: #002b37, #008ed4, #002b37, #003642, #008ed4
+rofi.color-urgent: #002b37, #da4281, #002b37, #003642, #da4281
+
+! "Border width"
+rofi.bw:                             0
+rofi.padding:                        800
+rofi.terminal:                       alacritty
+! "Separator style (none, dash, solid)" Set from: Default
+ rofi.separator-style:                solid
+
 ! "Enabled modi" Set from: Default
 ! rofi.modi:                           window,run,ssh
- rofi.width:                          100
- rofi.lines:                          7
- rofi.columns:                        1
- rofi.font:                           Source Code Pro 22
-! "Color scheme for normal row" Set from: Default
- rofi.color-window: #002b37, #002b37, #003642
- rofi.color-normal: #002b37, #819396, #002b37, #003642, #819396
- rofi.color-active: #002b37, #008ed4, #002b37, #003642, #008ed4
- rofi.color-urgent: #002b37, #da4281, #002b37, #003642, #da4281
-! "Border width" Set from: Default
- rofi.bw:                             0
 ! "Location on screen" Set from: Default
 ! rofi.location:                       0
-! "Padding" Set from: Default
- rofi.padding:                        800
 ! "Y-offset relative to location" Set from: Default
 ! rofi.yoffset:                        0
 ! "X-offset relative to location" Set from: Default
 ! rofi.xoffset:                        0
 ! "Always show number of lines" Set from: Default
 ! rofi.fixed-num-lines:                true
-! "Terminal to use" Set from: Default
- rofi.terminal:                       alacritty
 ! "Ssh client to use" Set from: Default
 ! rofi.ssh-client:                     ssh
 ! "Ssh command to execute" Set from: Default
@@ -67,8 +70,6 @@
 ! rofi.line-padding:                   1
 ! "Pre-set filter" Set from: Default
 ! rofi.filter:                         
-! "Separator style (none, dash, solid)" Set from: Default
-! rofi.separator-style:                dash
 ! "Hide scroll-bar" Set from: Default
 ! rofi.hide-scrollbar:                 false
 ! "Fullscreen" Set from: Default
