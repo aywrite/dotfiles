@@ -177,6 +177,8 @@ autocmd FileType cpp set tabstop=2
 autocmd FileType cpp set softtabstop=2
 autocmd FileType cpp set shiftwidth=2
 
+autocmd BufNewFile,BufRead *xmobarrc set filetype=haskell
+
 " ------ Rust-lang Settings ------
 au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
 au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>

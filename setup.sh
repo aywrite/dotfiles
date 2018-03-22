@@ -180,6 +180,8 @@ declare -a FILES_TO_SYMLINK=(
   'shell/zshrc'
   'shell/tmux.conf'
 
+  'xmobarrc'
+
   'git/gitattributes'
   'git/gitconfig'
   'git/gitignore'

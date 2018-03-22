@@ -1,0 +1,40 @@
+Config { font           = "xft:xos4 Terminus:pixelsize=16:antialias=true:hinting=true"
+        , borderColor   = "black"
+        , border        = TopB
+	, allDesktops   = True
+        , bgColor       = "#000000"
+        , fgColor       = "#586e75"
+        , alpha         = 100
+        , position      = TopW L 100
+        , commands = [ 
+		          Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                        , Run Network "eth1" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                        , Run Cpu ["-L","40","-H","60","--normal","green","--high","red"] 10
+                        , Run Memory ["-t","Mem: <usedratio>%"] 10
+
+                        -- battery monitor
+                        , Run Battery        [ "-t", "<fc=#b58900><acstatus></fc>" 
+					     --"--template" , "Batt: <acstatus>"
+                                             , "--Low"      , "15"        -- units: %
+                                             , "--High"     , "80"        -- units: %
+                                             , "--low"      , "#dc322f"
+                                             , "--normal"   , "#b58900"
+                                             , "--high"     , "#b58900"
+
+                                             , "--" -- battery specific options
+                                                       -- discharging status
+                                                       , "-o"	, "<left>% (<timeleft>)"
+                                                       -- AC "on" status
+                                                       , "-O"	, "<fc=#dAA520>Charging</fc>"
+                                                       -- charged status
+                                                       , "-i"	, "<fc=#006000>Charged</fc>"
+                                             ] 50
+
+                        , Run Com "uname" ["-s","-r"] "" 36000
+                        , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                        , Run StdinReader
+                        ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "%StdinReader% | %cpu% | %memory% | %eth0% - %eth1% }{<fc=#ee9a00>%date%</fc> | %battery%"
+        }

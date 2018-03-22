@@ -1,6 +1,6 @@
 import System.IO
--- Imports.
 import Data.Monoid
+-- Imports.
 import XMonad
 import XMonad.Actions.DynamicProjects
 import XMonad.Actions.DynamicWorkspaces
@@ -14,14 +14,15 @@ import XMonad.Util.Run(spawnPipe)
 -- not sure if these do anything yet
 import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
 import XMonad.Layout.PerWorkspace           -- Configure layouts on a per-workspace 
+import XMonad.Util.WorkspaceCompare
 
 -- The main function.
 main = do
         xmproc <- spawnPipe myStatusBar
 
-        xmonad
+        xmonad 
             $dynamicProjects projects
-            $myConfig
+	    $myConfig xmproc
 
 -- My Config Params
 myAltTerminal       = "gnome-terminal"
@@ -37,20 +38,38 @@ myTerminal          = "alacritty"
 xmobarTitleColor = "#429942"
 xmobarCurrentWorkspaceColor = "#429942"
 
--- Custom PP, configure it as you like. It determines what is being written to the bar.
---myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
+active      = blue
+activeWarn  = red
+inactive    = base02
+focusColor  = blue
+unfocusColor = base02
+
+base03  = "#002b36"
+base02  = "#073642"
+base01  = "#586e75"
+base00  = "#657b83"
+base0   = "#839496"
+base1   = "#93a1a1"
+base2   = "#eee8d5"
+base3   = "#fdf6e3"
+yellow  = "#b58900"
+orange  = "#cb4b16"
+red     = "#dc322f"
+magenta = "#d33682"
+violet  = "#6c71c4"
+blue    = "#268bd2"
+cyan    = "#2aa198"
+green       = "#859900"
 
 -- Main configuration, override the defaults to your liking.
-myConfig = defaultConfig
+myConfig p = def
         { modMask            = myModMask
         , terminal           = myTerminal
         , workspaces         = myWorkspaces
-        , layoutHook         = avoidStruts  $  layoutHook defaultConfig
-        , logHook            = dynamicLogWithPP $ xmobarPP {
-	 	ppTitle = xmobarColor xmobarTitleColor "" . shorten 100
-          	, ppCurrent = xmobarColor xmobarCurrentWorkspaceColor ""
-          	, ppSep = "   "
-      		}
+	, handleEventHook    = handleEventHook defaultConfig <+> docksEventHook
+	, manageHook         = manageDocks <+> manageHook defaultConfig
+        , layoutHook         = avoidStruts  $ layoutHook defaultConfig
+        , logHook            = myLogHook p
         }
 	`additionalKeys` myAdditionalKeys
 
@@ -130,3 +149,25 @@ projects =
                 , projectStartHook  = Just $ do spawn myBrowser
                 }
     ]
+
+-- Custom PP, configure it as you like. It determines what is being written to the bar.
+myLogHook h = dynamicLogWithPP $ def 
+
+        { ppCurrent             = xmobarColor active "" . wrap "[" "]"
+        , ppTitle               = xmobarColor active "" . shorten 50
+        , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
+        , ppUrgent              = xmobarColor red    "" . wrap " " " "
+        --, ppHidden              = check
+        , ppHiddenNoWindows     = const ""
+        , ppSep                 = xmobarColor red blue "  :  "
+        , ppWsSep               = " "
+        , ppLayout              = xmobarColor yellow ""
+        , ppOrder               = id
+        , ppOutput              = hPutStrLn h  
+	}
+
+	--	{ ppCurrent = xmobarColor "#F29942" "" . wrap "<" ">"
+	--	, ppTitle   = xmobarColor xmobarTitleColor "" . shorten 100
+        --  	, ppSep     = "|"
+	--        , ppOutput  = hPutStrLn h
+ 	--	}
