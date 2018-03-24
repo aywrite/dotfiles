@@ -10,6 +10,7 @@ webstorm/settings.jar
 # haskell settings
 *xmonad.errors
 *xmonad.state
+*xmonad-x86_64-linux
 *.o
 *.hi
 *.chi

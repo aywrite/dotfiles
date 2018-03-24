@@ -1,4 +1,4 @@
-Config { font           = "xft:xos4 Terminus:pixelsize=16:antialias=true:hinting=true"
+Config {  font           = "xft:xos4 Terminus:pixelsize=16:antialias=true:hinting=true"
         , borderColor   = "black"
         , border        = TopB
 	, allDesktops   = True
@@ -9,12 +9,17 @@ Config { font           = "xft:xos4 Terminus:pixelsize=16:antialias=true:hinting
         , commands = [ 
 		          Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
                         , Run Network "eth1" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                        , Run Cpu ["-L","40","-H","60","--normal","green","--high","red"] 10
-                        , Run Memory ["-t","Mem: <usedratio>%"] 10
+			-- CPU status
+                        , Run Cpu            ["-L"       ,"40"
+			                     ,"-H"       ,"60"
+			                     ,"--normal" ,"#268bd2"
+			                     ,"--high"   ,"#b58900"
+					     ] 10
+			-- Memory
+                        , Run Memory         ["-t","Mem: <usedratio>%"] 10
 
                         -- battery monitor
                         , Run Battery        [ "-t", "<fc=#b58900><acstatus></fc>" 
-					     --"--template" , "Batt: <acstatus>"
                                              , "--Low"      , "15"        -- units: %
                                              , "--High"     , "80"        -- units: %
                                              , "--low"      , "#dc322f"

@@ -38,10 +38,10 @@ myTerminal          = "alacritty"
 xmobarTitleColor = "#429942"
 xmobarCurrentWorkspaceColor = "#429942"
 
-active      = blue
-activeWarn  = red
-inactive    = base02
-focusColor  = blue
+active       = blue
+activeWarn   = red
+inactive     = base02
+focusColor   = blue
 unfocusColor = base02
 
 base03  = "#002b36"
@@ -59,7 +59,7 @@ magenta = "#d33682"
 violet  = "#6c71c4"
 blue    = "#268bd2"
 cyan    = "#2aa198"
-green       = "#859900"
+green   = "#859900"
 
 -- Main configuration, override the defaults to your liking.
 myConfig p = def
@@ -77,9 +77,6 @@ myConfig p = def
 ------------------------------------------------------------------------}}}
 -- Keybindings                                                           {{{
 ---------------------------------------------------------------------------
-
--- Key binding to toggle the gap for the bar.
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
 
 myAdditionalKeys = [
 		((mod4Mask .|. shiftMask, xK_p), spawn myLauncher)
@@ -109,7 +106,7 @@ wsWRKB   = "WRKB"
 wsWRKT   = "WRKT"
 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = [wsGEN, wsWRKB, wsWRKT, wsCHAT, wsRW, wsTMP]
+myWorkspaces = [wsGEN, wsWRKT, wsWRKB, wsCHAT, wsRW, wsTMP]
 
 projects :: [Project]
 projects =
@@ -150,6 +147,10 @@ projects =
                 }
     ]
 
+------------------------------------------------------------------------}}}
+-- Status bar                                                           {{{
+---------------------------------------------------------------------------
+
 -- Custom PP, determines what is being written to xmobar.
 myLogHook h = dynamicLogWithPP $ def 
 
@@ -157,7 +158,6 @@ myLogHook h = dynamicLogWithPP $ def
         , ppTitle               = xmobarColor active "" . shorten 50
         , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
         , ppUrgent              = xmobarColor red    "" . wrap " " " "
-        --, ppHidden              = check
         , ppHiddenNoWindows     = const ""
         , ppSep                 = xmobarColor red blue "  :  "
         , ppWsSep               = " "
