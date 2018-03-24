@@ -1,5 +1,6 @@
-import System.IO
 import Data.Monoid
+import System.Exit
+import System.IO
 -- Imports.
 import XMonad
 import XMonad.Actions.DynamicProjects
@@ -10,6 +11,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.EZConfig(additionalKeys)
 import XMonad.Util.Run
 import XMonad.Util.Run(spawnPipe)
+import XMonad.Util.SpawnOnce
 --
 -- not sure if these do anything yet
 import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
@@ -72,12 +74,13 @@ myConfig p = def
         { modMask            = myModMask
         , terminal           = myTerminal
         , workspaces         = myWorkspaces
-	, handleEventHook    = handleEventHook defaultConfig <+> docksEventHook
-	, manageHook         = manageDocks <+> manageHook defaultConfig
+        , handleEventHook    = handleEventHook defaultConfig <+> docksEventHook
+        , manageHook         = manageDocks <+> manageHook defaultConfig
         , layoutHook         = avoidStruts  $ layoutHook defaultConfig
         , logHook            = myLogHook p
+        , startupHook        = myStartupHook
         }
-	`additionalKeys` myAdditionalKeys
+        `additionalKeys` myAdditionalKeys
 
 
 ------------------------------------------------------------------------}}}
@@ -165,12 +168,36 @@ myLogHook h = dynamicLogWithPP $ def
         , ppTitle               = xmobarColor active "" . shorten 50
         , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
         , ppUrgent              = xmobarColor red    "" . wrap " " " "
-        , ppHiddenNoWindows     = const ""
-        , ppSep                 = xmobarColor red blue "  :  "
+        , ppHiddenNoWindows     = xmobarColor inactive ""
+        , ppSep                 = xmobarColor red "#000000" "  :  "
         , ppWsSep               = " | "
         , ppLayout              = xmobarColor yellow ""
         , ppOrder               = id
         , ppOutput              = hPutStrLn h  
 	}
+
+------------------------------------------------------------------------}}}
+-- Startup                                                              {{{
+---------------------------------------------------------------------------
+
+myStartupHook = do
+
+    -- init-tilingwm sets up all major "desktop environment" like components
+    -- spawnOnce "$HOME/bin/wm/init-tilingwm"
+    -- spawn "/home/ethan/bin/wm/init-tilingwm"
+    spawn "feh --bg-fill ~/.wallpapers/frosted.jpg"
+
+    --setDefaultCursor xC_left_ptr
+
+quitXmonad :: X ()
+quitXmonad = io (exitWith ExitSuccess)
+
+rebuildXmonad :: X ()
+rebuildXmonad = do
+    spawn "xmonad --recompile && xmonad --restart"
+
+restartXmonad :: X ()
+restartXmonad = do
+    spawn "xmonad --restart"
 
 -- vim: ft=haskell:foldmethod=marker:expandtab:ts=4:shiftwidth=4
