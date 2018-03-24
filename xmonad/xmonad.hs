@@ -24,15 +24,21 @@ main = do
             $dynamicProjects projects
 	    $myConfig xmproc
 
--- My Config Params
+-- My Applicatoins
 myAltTerminal       = "gnome-terminal"
 myBrowser           = "google-chrome"
+myPersonalBrowser   = myBrowser ++ " --profile-directory=Default"
+myTerminal          = "alacritty"
+myWorkBrowser       = myBrowser ++ " --profile-directory='Profile 1'"
+myWorkChat          = myWorkBrowser ++ " --app=https://chat.tools.flnltd.com/home"
+myWorkMonitoring    = myWorkBrowser ++ " https://grafana.fln.flnltd.com/"
+
+-- My Config Params
 myLauncher          = "rofi -show run"
 myLockScreen        = "i3lock"
 myModMask           = mod4Mask
 myStartupScript     = "/home/andrewwright/.xmonad/startup.sh"
 myStatusBar         = "xmobar"
-myTerminal          = "alacritty"
 
 -- Colors
 xmobarTitleColor = "#429942"
@@ -91,22 +97,22 @@ myAdditionalKeys = [
 
 wsAV     = "AV"
 wsBSA    = "BSA"
-wsCHAT   = "CHAT"
+wsCHAT   = "4: CHAT"
 wsCOM    = "COM"
 wsDOM    = "DOM"
 wsGCC    = "GCC"
-wsGEN    = "GEN"
+wsGEN    = "1: GEN"
 wsGGC    = "GGC"
-wsMON    = "MON"
+wsMON    = "5: MON"
 wsOSS    = "OSS"
 wsRAD    = "RAD"
-wsRW     = "RW"
-wsTMP    = "TMP"
-wsWRKB   = "WRKB"
-wsWRKT   = "WRKT"
+wsPB     = "6: PB"
+wsTMP    = "7: TMP"
+wsWRKB   = "3: WRKB"
+wsWRKT   = "2: WRKT"
 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = [wsGEN, wsWRKT, wsWRKB, wsCHAT, wsRW, wsTMP]
+myWorkspaces = [wsGEN, wsWRKT, wsWRKB, wsCHAT, wsMON, wsPB, wsTMP]
 
 projects :: [Project]
 projects =
@@ -114,6 +120,7 @@ projects =
     [ Project   { projectName       = wsGEN
                 , projectDirectory  = "~/"
                 , projectStartHook  = Just $ do spawnOn wsGEN myTerminal
+		                                spawnOn wsGEN myBrowser
                 }
 
     , Project   { projectName       = wsWRKT
@@ -122,28 +129,28 @@ projects =
                 }
 
     , Project   { projectName       = wsWRKB
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do spawnOn wsWRKB myBrowser
+                , projectDirectory  = "~/freelancer-dev"
+                , projectStartHook  = Just $ do spawnOn wsWRKB myWorkBrowser
                 }
 
     , Project   { projectName       = wsCHAT
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do spawnOn wsCHAT myBrowser
+                , projectDirectory  = "~/freelancer-dev"
+                , projectStartHook  = Just $ do spawnOn wsCHAT myWorkChat
                 }
 
     , Project   { projectName       = wsMON
-                , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do spawnOn wsMON myTerminal
+                , projectDirectory  = "~/freelancer-dev"
+                , projectStartHook  = Just $ do spawnOn wsMON myWorkMonitoring
                 }
 
-    , Project   { projectName       = wsRAD
+    , Project   { projectName       = wsPB
                 , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do spawn myBrowser
+                , projectStartHook  = Just $ do spawnOn wsPB myPersonalBrowser
                 }
 
     , Project   { projectName       = wsTMP
                 , projectDirectory  = "~/"
-                , projectStartHook  = Just $ do spawn myBrowser
+                , projectStartHook  = Just $ do spawnOn wsTMP myPersonalBrowser
                 }
     ]
 
@@ -160,8 +167,10 @@ myLogHook h = dynamicLogWithPP $ def
         , ppUrgent              = xmobarColor red    "" . wrap " " " "
         , ppHiddenNoWindows     = const ""
         , ppSep                 = xmobarColor red blue "  :  "
-        , ppWsSep               = " "
+        , ppWsSep               = " | "
         , ppLayout              = xmobarColor yellow ""
         , ppOrder               = id
         , ppOutput              = hPutStrLn h  
 	}
+
+-- vim: ft=haskell:foldmethod=marker:expandtab:ts=4:shiftwidth=4
