@@ -1,3 +1,6 @@
+------------------------------------------------------------------------}}}
+-- Modules                                                              {{{
+---------------------------------------------------------------------------
 import Data.Monoid
 import System.Exit
 import System.IO
@@ -5,47 +8,83 @@ import System.IO
 import XMonad
 import XMonad.Actions.DynamicProjects
 import XMonad.Actions.DynamicWorkspaces
-import XMonad.Actions.SpawnOn
+import XMonad.Actions.SpawnOn               -- Spawn windows on a specific workspace
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.DynamicProperty         
+import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
-import XMonad.Util.EZConfig(additionalKeys)
+import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.UrgencyHook
+import XMonad.Layout.DecorationMadness      -- testing alternative accordion styles
+import XMonad.Layout.Fullscreen
+import XMonad.Layout.NoFrillsDecoration
+import XMonad.Layout.ShowWName
+import XMonad.Layout.SimplestFloat
+import XMonad.Layout.WindowNavigation       -- Navigate directionally between windows
+import XMonad.Util.EZConfig
+import XMonad.Util.EZConfig(additionalKeysP)
+import XMonad.Util.NamedActions
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.NamedWindows
 import XMonad.Util.Run
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.SpawnOnce
+import qualified XMonad.StackSet as W       -- myManageHookShift
 --
 -- not sure if these do anything yet
 import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
 import XMonad.Layout.PerWorkspace           -- Configure layouts on a per-workspace 
 import XMonad.Util.WorkspaceCompare
 
--- The main function.
+------------------------------------------------------------------------}}}
+-- Main                                                                 {{{
+---------------------------------------------------------------------------
+
 main = do
         xmproc <- spawnPipe myStatusBar
 
         xmonad 
-            $dynamicProjects projects
-	    $myConfig xmproc
+            $ dynamicProjects projects
+            $ withUrgencyHook LibNotifyUrgencyHook
+            $ myConfig xmproc
 
--- My Applicatoins
-myAltTerminal       = "gnome-terminal"
+
+myConfig p = def
+        { modMask            = myModMask
+        , borderWidth        = border
+        , focusedBorderColor = active
+        , terminal           = myTerminal
+        , workspaces         = myWorkspaces
+        , handleEventHook    = myHandleEventHook
+        , manageHook         = myManageHook
+        , layoutHook         = myLayoutHook
+        , logHook            = myLogHook p
+        , startupHook        = myStartupHook
+        }
+        `additionalKeysP` myAdditionalKeys
+
+
+------------------------------------------------------------------------}}}
+-- Applications                                                         {{{
+---------------------------------------------------------------------------
+
+myAltTerminal       = "alacritty"
 myBrowser           = "google-chrome"
 myPersonalBrowser   = myBrowser ++ " --profile-directory=Default"
-myTerminal          = "alacritty"
+myTerminal          = "gnome-terminal"
 myWorkBrowser       = myBrowser ++ " --profile-directory='Profile 1'"
 myWorkChat          = myWorkBrowser ++ " --app=https://chat.tools.flnltd.com/home"
-myWorkMonitoring    = myWorkBrowser ++ " https://grafana.fln.flnltd.com/"
-
--- My Config Params
+myWorkMonitoring    = myWorkBrowser ++ " --new-window https://grafana.fln.flnltd.com/"
 myLauncher          = "rofi -show run"
 myLockScreen        = "i3lock"
-myModMask           = mod4Mask
 myStartupScript     = "/home/andrewwright/.xmonad/startup.sh"
 myStatusBar         = "xmobar"
 
--- Colors
-xmobarTitleColor = "#429942"
-xmobarCurrentWorkspaceColor = "#429942"
+------------------------------------------------------------------------}}}
+-- Themes                                                               {{{
+---------------------------------------------------------------------------
 
+-- Colors
 active       = blue
 activeWarn   = red
 inactive     = base02
@@ -69,30 +108,107 @@ blue    = "#268bd2"
 cyan    = "#2aa198"
 green   = "#859900"
 
--- Main configuration, override the defaults to your liking.
-myConfig p = def
-        { modMask            = myModMask
-        , terminal           = myTerminal
-        , workspaces         = myWorkspaces
-        , handleEventHook    = handleEventHook defaultConfig <+> docksEventHook
-        , manageHook         = manageDocks <+> manageHook defaultConfig
-        , layoutHook         = avoidStruts  $ layoutHook defaultConfig
-        , logHook            = myLogHook p
-        , startupHook        = myStartupHook
-        }
-        `additionalKeys` myAdditionalKeys
+-- Fonts
+myWideFont   = "-*-terminus-medium-*-*-*-*-180-*-*-*-*-*-*"
+myFont       = "-*-terminus-medium-*-*-*-*-160-*-*-*-*-*-*"
+
+-- Size/Layout
+gap         = 10
+topbar      = 10
+border      = 0
+prompt      = 20
+status      = 20
+
+-- Themes
+myShowWNameTheme = def
+    { swn_font              = myWideFont
+    , swn_fade              = 0.5
+    , swn_bgcolor           = "#000000"
+    , swn_color             = "#FFFFFF"
+    }
+
+topBarTheme = def
+    { fontName              = myFont
+    , inactiveBorderColor   = base03
+    , inactiveColor         = base03
+    , inactiveTextColor     = base03
+    , activeBorderColor     = active
+    , activeColor           = active
+    , activeTextColor       = active
+    , urgentBorderColor     = red
+    , urgentTextColor       = yellow
+    , decoHeight            = topbar
+    }
+
+------------------------------------------------------------------------}}}
+-- Hooks                                                                {{{
+---------------------------------------------------------------------------
+
+myManageHook =
+    manageSpecific
+    <+> manageDocks
+    <+> manageHook defaultConfig
+    <+> namedScratchpadManageHook scratchpads
+    <+> fullscreenManageHook
+    <+> manageSpawn
+    where
+        manageSpecific = composeOne
+            [ isChat -?> forceCenterFloat
+            , isDialog -?> doCenterFloat
+            , isFullscreen -?> doFullFloat
+            , isRole =? "pop-up" -?> doCenterFloat
+            , isRole =? "chat_notif" -?> forceCenterFloat
+            ]
+        isRole = stringProperty "WM_WINDOW_ROLE"
+
+myLayoutHook = showWorkspaceName
+        $ onWorkspace wsFLOAT simplestFloat
+        $ avoidStruts
+        $ addTopBar
+        $ layoutHook defaultConfig
+    where
+        showWorkspaceName   = showWName' myShowWNameTheme
+        addTopBar           = noFrillsDeco shrinkText topBarTheme
+
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name     <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+
+        safeSpawn "notify-send" [show name, "workspace " ++ idx]
+
+---------------------------------------------------------------------------
+-- X Event Actions
+---------------------------------------------------------------------------
+
+-- for reference, the following line is the same as dynamicTitle myDynHook
+-- <+> dynamicPropertyChange "WM_NAME" myDynHook
+
+myHandleEventHook = docksEventHook
+                <+> dynamicTitle myDynHook
+                <+> handleEventHook def
+                <+> XMonad.Layout.Fullscreen.fullscreenEventHook
+    where
+        myDynHook = composeAll
+            [ isChat --> forceCenterFloat
+            ]
 
 
 ------------------------------------------------------------------------}}}
 -- Keybindings                                                           {{{
 ---------------------------------------------------------------------------
 
+myModMask           = mod4Mask
+
 myAdditionalKeys = [
-		((mod4Mask .|. shiftMask, xK_p), spawn myLauncher)
-	,	((mod4Mask .|. shiftMask, xK_z), spawn myAltTerminal)
-	,	((mod4Mask .|. shiftMask, xK_s), spawn myStartupScript)
-	,	((mod4Mask .|. shiftMask, xK_l), spawn myLockScreen)
-	]
+      ("M-S-p", spawn myLauncher)
+    , ("M-S-z", spawn myAltTerminal)
+    , ("M-S-s", spawn myStartupScript)
+    , ("M-S-l", spawn myLockScreen)
+    , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
+    ]
 
 ------------------------------------------------------------------------}}}
 -- Workspaces                                                           {{{
@@ -113,9 +229,11 @@ wsPB     = "6: PB"
 wsTMP    = "7: TMP"
 wsWRKB   = "3: WRKB"
 wsWRKT   = "2: WRKT"
+wsFLOAT  = "FLT"
 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = [wsGEN, wsWRKT, wsWRKB, wsCHAT, wsMON, wsPB, wsTMP]
+-- TODO auto number these with map
+myWorkspaces = [wsGEN, wsWRKT, wsWRKB, wsCHAT, wsMON, wsPB, wsTMP, wsFLOAT]
 
 projects :: [Project]
 projects =
@@ -157,6 +275,15 @@ projects =
                 }
     ]
 
+-- Scratch pads
+
+scratchpads =
+    [   (NS "chatwork"  myWorkChat isChat defaultFloating)
+    ] 
+
+chatWorkResource = "chat.tools.flnltd.com__home"
+isChat = (resource =? chatWorkResource)
+
 ------------------------------------------------------------------------}}}
 -- Status bar                                                           {{{
 ---------------------------------------------------------------------------
@@ -165,7 +292,7 @@ projects =
 myLogHook h = dynamicLogWithPP $ def 
 
         { ppCurrent             = xmobarColor active "" . wrap "[" "]"
-        , ppTitle               = xmobarColor active "" . shorten 50
+        , ppTitle               = xmobarColor active "" . shorten 40
         , ppVisible             = xmobarColor base0  "" . wrap "(" ")"
         , ppUrgent              = xmobarColor red    "" . wrap " " " "
         , ppHiddenNoWindows     = xmobarColor inactive ""
@@ -175,6 +302,7 @@ myLogHook h = dynamicLogWithPP $ def
         , ppOrder               = id
         , ppOutput              = hPutStrLn h  
 	}
+
 
 ------------------------------------------------------------------------}}}
 -- Startup                                                              {{{
@@ -199,5 +327,28 @@ rebuildXmonad = do
 restartXmonad :: X ()
 restartXmonad = do
     spawn "xmonad --restart"
+
+---------------------------------------------------------------------------
+-- Custom hook helpers
+---------------------------------------------------------------------------
+
+-- from:
+-- https://github.com/pjones/xmonadrc/blob/master/src/XMonad/Local/Action.hs
+--
+-- Useful when a floating window requests stupid dimensions.  There
+-- was a bug in Handbrake that would pop up the file dialog with
+-- almost no height due to one of my rotated monitors.
+
+forceCenterFloat :: ManageHook
+forceCenterFloat = doFloatDep move
+  where
+    move :: W.RationalRect -> W.RationalRect
+    move _ = W.RationalRect x y w h
+
+    w, h, x, y :: Rational
+    w = 1/3
+    h = 2/3
+    x = (1-w)/2
+    y = (1-h)/2
 
 -- vim: ft=haskell:foldmethod=marker:expandtab:ts=4:shiftwidth=4

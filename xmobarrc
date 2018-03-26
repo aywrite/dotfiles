@@ -1,4 +1,4 @@
-Config {  font           = "xft:xos4 Terminus:pixelsize=16:antialias=true:hinting=true"
+Config {  font           = "xft:xos4 Terminus:pixelsize=18:antialias=true:hinting=true"
         , borderColor   = "black"
         , border        = TopB
 	, allDesktops   = True
