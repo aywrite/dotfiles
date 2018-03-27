@@ -120,10 +120,11 @@ myFont       = "-*-terminus-medium-*-*-*-*-160-*-*-*-*-*-*"
 gap         = 10
 topbar      = 10
 border      = 0
-prompt      = 20
+prompt      = 25
 status      = 20
 
 -- Themes
+--
 myShowWNameTheme = def
     { swn_font              = myWideFont
     , swn_fade              = 0.5
@@ -144,6 +145,7 @@ topBarTheme = def
     , decoHeight            = topbar
     }
 
+-- prompt on quit theme
 myPromptTheme = def
     { font                  = myFont
     , bgColor               = base03
@@ -201,15 +203,6 @@ myLayoutHook = showWorkspaceName
         showWorkspaceName   = showWName' myShowWNameTheme
         addTopBar           = noFrillsDeco shrinkText topBarTheme
 
-data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
-
-instance UrgencyHook LibNotifyUrgencyHook where
-    urgencyHook LibNotifyUrgencyHook w = do
-        name     <- getName w
-        Just idx <- fmap (W.findTag w) $ gets windowset
-
-        safeSpawn "notify-send" [show name, "workspace " ++ idx]
-
 ---------------------------------------------------------------------------
 -- X Event Actions
 ---------------------------------------------------------------------------
@@ -225,6 +218,20 @@ myHandleEventHook = docksEventHook
         myDynHook = composeAll
             [ isChat --> forceCenterFloat
             ]
+
+---------------------------------------------------------------------------
+-- Notifications
+---------------------------------------------------------------------------
+
+data LibNotifyUrgencyHook = LibNotifyUrgencyHook deriving (Read, Show)
+
+instance UrgencyHook LibNotifyUrgencyHook where
+    urgencyHook LibNotifyUrgencyHook w = do
+        name     <- getName w
+        Just idx <- fmap (W.findTag w) $ gets windowset
+
+        safeSpawn "notify-send" [show name, "workspace " ++ idx]
+
 
 
 ------------------------------------------------------------------------}}}
