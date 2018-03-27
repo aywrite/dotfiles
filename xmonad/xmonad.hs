@@ -11,6 +11,7 @@ import XMonad.Actions.DynamicWorkspaces
 import XMonad.Actions.SpawnOn               -- Spawn windows on a specific workspace
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.DynamicProperty         
+import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
@@ -21,6 +22,8 @@ import XMonad.Layout.NoFrillsDecoration
 import XMonad.Layout.ShowWName
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.WindowNavigation       -- Navigate directionally between windows
+import XMonad.Prompt
+import XMonad.Prompt.ConfirmPrompt  
 import XMonad.Util.EZConfig
 import XMonad.Util.EZConfig(additionalKeysP)
 import XMonad.Util.NamedActions
@@ -46,6 +49,7 @@ main = do
         xmonad 
             $ dynamicProjects projects
             $ withUrgencyHook LibNotifyUrgencyHook
+            $ ewmh
             $ myConfig xmproc
 
 
@@ -140,6 +144,30 @@ topBarTheme = def
     , decoHeight            = topbar
     }
 
+myPromptTheme = def
+    { font                  = myFont
+    , bgColor               = base03
+    , fgColor               = active
+    , fgHLight              = base03
+    , bgHLight              = active
+    , borderColor           = base03
+    , promptBorderWidth     = 0
+    , height                = prompt
+    , position              = Top
+    }
+
+warmPromptTheme = myPromptTheme
+    { bgColor               = yellow
+    , fgColor               = base03
+    , position              = Top
+    }
+
+hotPromptTheme = myPromptTheme
+    { bgColor               = red
+    , fgColor               = base3
+    , position              = Top
+    }
+
 ------------------------------------------------------------------------}}}
 -- Hooks                                                                {{{
 ---------------------------------------------------------------------------
@@ -157,7 +185,10 @@ myManageHook =
             , isDialog -?> doCenterFloat
             , isFullscreen -?> doFullFloat
             , isRole =? "pop-up" -?> doCenterFloat
+            , isRole =? "popup" -?> forceCenterFloat
             , isRole =? "chat_notif" -?> forceCenterFloat
+            , isInProperty "_NET_WM_WINDOW_TYPE"
+                           "_NET_WM_WINDOW_TYPE_NOTIFICATION" -?> forceCenterFloat
             ]
         isRole = stringProperty "WM_WINDOW_ROLE"
 
@@ -208,6 +239,7 @@ myAdditionalKeys = [
     , ("M-S-s", spawn myStartupScript)
     , ("M-S-l", spawn myLockScreen)
     , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
+    , ("M-S-q", confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     ]
 
 ------------------------------------------------------------------------}}}
@@ -289,7 +321,10 @@ isChat = (resource =? chatWorkResource)
 ---------------------------------------------------------------------------
 
 -- Custom PP, determines what is being written to xmobar.
-myLogHook h = dynamicLogWithPP $ def 
+myLogHook h = do
+
+    ewmhDesktopsLogHook
+    dynamicLogWithPP $ def 
 
         { ppCurrent             = xmobarColor active "" . wrap "[" "]"
         , ppTitle               = xmobarColor active "" . shorten 40
