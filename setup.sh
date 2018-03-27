@@ -181,6 +181,9 @@ declare -a FILES_TO_SYMLINK=(
   'shell/tmux.conf'
 
   'xmobarrc'
+  'xprofile'
+  'xinitrc'
+  'Xresources'
 
   'git/gitattributes'
   'git/gitconfig'
