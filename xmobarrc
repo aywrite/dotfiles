@@ -36,7 +36,7 @@ Config {  font           = "xft:xos4 Terminus:pixelsize=18:antialias=true:hintin
                                              ] 50
 
                         , Run Com "uname" ["-s","-r"] "" 36000
-                        , Run Date "%a %b %_d %Y %H:%M:%S" "date" 10
+                        , Run Date "%a %_d/%m %H:%M" "date" 10
                         , Run StdinReader
                         ]
         , sepChar = "%"
