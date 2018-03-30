@@ -72,10 +72,10 @@ myConfig p = def
 -- Applications                                                         {{{
 ---------------------------------------------------------------------------
 
-myAltTerminal       = "alacritty"
+myAltTerminal       = "gnome-terminal"
 myBrowser           = "google-chrome"
 myPersonalBrowser   = myBrowser ++ " --profile-directory=Default"
-myTerminal          = "gnome-terminal"
+myTerminal          = "urxvt"
 myWorkBrowser       = myBrowser ++ " --profile-directory='Profile 1'"
 myWorkChat          = myWorkBrowser ++ " --app=https://chat.tools.flnltd.com/home"
 myWorkMonitoring    = myWorkBrowser ++ " --new-window https://grafana.fln.flnltd.com/"
