@@ -141,20 +141,17 @@ URxvt*background: rgba:0000/2b00/3600/EE00
 
 
 !! ------ Functionality ------
+URxvt*urgentOnBell: true
+!! URxvt*cursorUnderline: true
+URxvt*cursorBlink: true
+URxvt*termName: xterm-256color
 URxvt*saveLines: 12000
 URxvt*scrollstyle:plain
-!! URxvt*scrollBar: false
-!! URxvt*scrollBar: true
-URxvt*cursorBlink: true
-!! URxvt*cursorUnderline: true
-URxvt*scrollBar_floating: true
-!!URxvt*skipBuiltinGlyphs: true # urxvt line drawing glyphs are generally better
-URxvt*scrollBar_right: true
-!!URxvt*scrollColor: #586e75
+URxvt*scrollBar: false
+URxvt*scrollBar_floating: false
+URxvt*scrollBar_right: false
 URxvt*scrollColor: S_base02
 !! URxvt.scrollstyle: rxvt
-URxvt*urgentOnBell: true
-URxvt*termName: xterm-256color
 !! scroll back in things like 'less'
 !!URxvt.secondaryScreen: 1
 !!URxvt.secondaryScroll: 0
