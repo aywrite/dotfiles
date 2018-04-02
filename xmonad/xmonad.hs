@@ -8,9 +8,10 @@ import System.IO
 import XMonad
 import XMonad.Actions.DynamicProjects
 import XMonad.Actions.DynamicWorkspaces
+import XMonad.Actions.Navigation2D
 import XMonad.Actions.SpawnOn               -- Spawn windows on a specific workspace
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.DynamicProperty         
+import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
@@ -19,11 +20,12 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Layout.DecorationMadness      -- testing alternative accordion styles
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoFrillsDecoration
+import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
+import XMonad.Layout.PerWorkspace           -- Configure layouts on a per-workspace
 import XMonad.Layout.ShowWName
 import XMonad.Layout.SimplestFloat
-import XMonad.Layout.WindowNavigation       -- Navigate directionally between windows
 import XMonad.Prompt
-import XMonad.Prompt.ConfirmPrompt  
+import XMonad.Prompt.ConfirmPrompt
 import XMonad.Util.EZConfig
 import XMonad.Util.EZConfig(additionalKeysP)
 import XMonad.Util.NamedActions
@@ -35,8 +37,6 @@ import XMonad.Util.SpawnOnce
 import qualified XMonad.StackSet as W       -- myManageHookShift
 --
 -- not sure if these do anything yet
-import XMonad.Layout.PerScreen              -- Check screen width & adjust layouts
-import XMonad.Layout.PerWorkspace           -- Configure layouts on a per-workspace 
 import XMonad.Util.WorkspaceCompare
 
 ------------------------------------------------------------------------}}}
@@ -48,6 +48,7 @@ main = do
 
         xmonad 
             $ dynamicProjects projects
+            $ withNavigation2DConfig myNav2DConf
             $ withUrgencyHook LibNotifyUrgencyHook
             $ ewmh
             $ myConfig xmproc
@@ -247,7 +248,26 @@ myAdditionalKeys = [
     , ("M-S-l", spawn myLockScreen)
     , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
     , ("M-S-q", confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
+    -- navigation
+    , ("M-h", windowGo L False)
+    , ("M-j", windowGo D False)
+    , ("M-k", windowGo U False)
+    , ("M-l", windowGo R False)
+    , ("M-S-h", windowSwap L False)
+    , ("M-S-j", windowSwap D False)
+    , ("M-S-k", windowSwap U False)
+    , ("M-S-l", windowSwap R False)
+    , ("M-<L>", screenGo L False)
+    , ("M-<D>", screenGo D False)
+    , ("M-<U>", screenGo U False)
+    , ("M-<R>", screenGo R False)
     ]
+
+myNav2DConf = def
+    { defaultTiledNavigation    = centerNavigation
+    , floatNavigation           = centerNavigation
+    , screenNavigation          = lineNavigation
+    }
 
 ------------------------------------------------------------------------}}}
 -- Workspaces                                                           {{{
@@ -280,7 +300,7 @@ projects =
     [ Project   { projectName       = wsGEN
                 , projectDirectory  = "~/"
                 , projectStartHook  = Just $ do spawnOn wsGEN myTerminal
-		                                spawnOn wsGEN myBrowser
+                                                spawnOn wsGEN myBrowser
                 }
 
     , Project   { projectName       = wsWRKT
@@ -343,7 +363,7 @@ myLogHook h = do
         , ppLayout              = xmobarColor yellow ""
         , ppOrder               = id
         , ppOutput              = hPutStrLn h  
-	}
+       }
 
 
 ------------------------------------------------------------------------}}}
