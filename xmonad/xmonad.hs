@@ -217,7 +217,7 @@ myHandleEventHook = docksEventHook
                 <+> XMonad.Layout.Fullscreen.fullscreenEventHook
     where
         myDynHook = composeAll
-            [ isChat --> forceCenterFloat
+            [ isChat --> insertPosition End Newer
             ]
 
 ---------------------------------------------------------------------------
@@ -245,7 +245,7 @@ myAdditionalKeys = [
       ("M-S-p", spawn myLauncher)
     , ("M-S-z", spawn myAltTerminal)
     , ("M-S-s", spawn myStartupScript)
-    , ("M-S-l", spawn myLockScreen)
+    , ("M-C-l", spawn myLockScreen)
     , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
     , ("M-S-q", confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     -- navigation
