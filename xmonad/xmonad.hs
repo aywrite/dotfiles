@@ -82,7 +82,7 @@ myWorkChat          = myWorkBrowser ++ " --app=https://chat.tools.flnltd.com/hom
 myWorkMonitoring    = myWorkBrowser ++ " --new-window https://grafana.fln.flnltd.com/"
 myLauncher          = "rofi -show run"
 myLockScreen        = "i3lock"
-myStartupScript     = "/home/andrewwright/.xmonad/startup.sh"
+myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
 
 ------------------------------------------------------------------------}}}
