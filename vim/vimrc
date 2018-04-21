@@ -33,6 +33,7 @@ Plug 'kylef/apiblueprint.vim'
 Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
 Plug 'martinda/Jenkinsfile-vim-syntax'
 Plug 'cespare/vim-toml'
+Plug 'hashivim/vim-terraform'
 
 " --- language server ---
 set hidden
