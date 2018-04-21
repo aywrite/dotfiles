@@ -11,7 +11,7 @@ rofi.color-urgent: #002b37, #da4281, #002b37, #003642, #da4281
 
 ! "Border width"
 rofi.bw:                             0
-rofi.padding:                        800
+rofi.padding:                        500
 rofi.terminal:                       alacritty
 ! "Separator style (none, dash, solid)" Set from: Default
  rofi.separator-style:                solid
