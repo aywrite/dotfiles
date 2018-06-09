@@ -12,6 +12,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/indentpython.vim'
 Plug 'scrooloose/syntastic'
+"Plug 'w0rp/ale'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
@@ -34,6 +35,7 @@ Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
 Plug 'martinda/Jenkinsfile-vim-syntax'
 Plug 'cespare/vim-toml'
 Plug 'hashivim/vim-terraform'
+Plug 'pangloss/vim-javascript'
 
 " --- language server ---
 set hidden
@@ -119,6 +121,15 @@ let g:syntastic_style_warning_symbol  = '>'
 
 "let g:syntastic_always_populate_loc_list = 1
 "let g:syntastic_auto_loc_list = 1
+let g:syntastic_javascript_checkers = ['eslint']
+
+" ALE settings
+let g:ale_fixers = {
+\   'javascript': ['eslint']
+\}
+
+" wrap errors at bottom of vim screen
+autocmd FileType qf setlocal wrap
 
 " ------ Python Settings ------
 " don't show the documentation window during jedi completion
