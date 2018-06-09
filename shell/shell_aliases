@@ -37,3 +37,6 @@ alias reload="source ~/.zshrc && echo 'Shell config reloaded from ~/.zshrc'"
 
 # zsh.local config
 alias localrc="if [[ -a ~/.zsh.local ]]; then ${EDITOR} ~/.zsh.local; fi"
+
+#alias git="~/.push-confirm && git"
+alias git=git

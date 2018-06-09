@@ -80,7 +80,7 @@ myTerminal          = "urxvt"
 myWorkBrowser       = myBrowser ++ " --profile-directory='Profile 1'"
 myWorkChat          = myWorkBrowser ++ " --app=https://chat.tools.flnltd.com/home"
 myWorkMonitoring    = myWorkBrowser ++ " --new-window https://grafana.fln.flnltd.com/"
-myLauncher          = "rofi -show run"
+myLauncher          = "rofi -combi-modi run,ScreenCTL:~/.screenctl -show combi -modi combi"
 myLockScreen        = "i3lock"
 myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
@@ -217,8 +217,7 @@ myHandleEventHook = docksEventHook
                 <+> XMonad.Layout.Fullscreen.fullscreenEventHook
     where
         myDynHook = composeAll
-            [ isChat --> insertPosition End Newer
-            ]
+            []
 
 ---------------------------------------------------------------------------
 -- Notifications
