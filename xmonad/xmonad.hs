@@ -84,6 +84,7 @@ myLauncher          = "rofi -combi-modi run,ScreenCTL:~/.screenctl -show combi -
 myLockScreen        = "i3lock"
 myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
+myOtherStatusBar    = "~/.config/polybar/launch.sh"
 
 ------------------------------------------------------------------------}}}
 -- Themes                                                               {{{
