@@ -53,6 +53,7 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ }
+
 " --- language server (vim-lsp) ---
 "if executable('rls')
 "    au User lsp_setup call lsp#register_server({
@@ -62,8 +63,9 @@ let g:LanguageClient_serverCommands = {
 "        \ })
 "endif
 
-let g:lsp_signs_enabled = 1         " enable signs
+let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+
 " --- completion ---
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -76,6 +78,13 @@ let g:deoplete#enable_at_startup = 1
 
 call plug#end()
 " --- End Plugins ---
+
+" Default indentation settings
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
 
 " line numbering
 set number
@@ -130,7 +139,7 @@ let g:syntastic_enable_balloons       = 1
 let g:syntastic_echo_current_error    = 1
 let g:syntastic_check_on_open         = 1
 let g:syntastic_check_on_wq           = 0
-let g:syntastic_error_symbol          = 'X'
+let g:syntastic_error_symbol          = '!'
 let g:syntastic_warning_symbol        = '>'
 let g:syntastic_style_error_symbol    = 'X'
 let g:syntastic_style_warning_symbol  = '>'
@@ -186,7 +195,6 @@ autocmd FileType Jenkinsfile set shiftwidth=2
 autocmd FileType Jenkinsfile set expandtab
 autocmd FileType Jenkinsfile set autoindent
 
-
 " ------ API blueprint (.apib) settings
 autocmd FileType apiblueprint set expandtab
 autocmd FileType apiblueprint set tabstop=4
@@ -210,19 +218,19 @@ autocmd FileType cpp set shiftwidth=2
 autocmd BufNewFile,BufRead *xmobarrc set filetype=haskell
 
 " ------ Rust-lang Settings ------
- au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
-au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
-au FileType rust nmap <leader>b :!cargo build<CR>
+au FileType rust let b:dispatch = 'cargo test'
+au FileType rust nmap <leader>b :Dispatch cargo build<CR>
 au FileType rust nmap <leader>r :!cargo run<CR>
 au FileType rust nmap <leader>t :Dispatch<CR>
 au FileType rust nmap <leader>c :Dispatch cargo check<CR>
-au FileType rust let b:dispatch = 'cargo test'
+
+au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
+au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
 "au FileType rust nmap <leader>g :LspDefinition<CR>
 "au FileType rust nmap <leader>d :LspHover<CR>
 "au FileType rust nmap <leader>f :LspDocumentFormat<CR>
 "au FileType rust nmap <leader>k :LspNextError<CR>
 "au FileType rust nmap <leader>j :LspPreviousError<CR>
-
 
 "nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 au FileType rust let g:syntastic_rust_checkers = ['rustc', 'clippy']
