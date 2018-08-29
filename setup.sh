@@ -185,6 +185,8 @@ declare -a FILES_TO_SYMLINK=(
   'xinitrc'
   'Xresources'
 
+  'spacemacs'
+
   'git/gitattributes'
   'git/gitconfig'
   'git/gitignore'
