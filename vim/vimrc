@@ -20,14 +20,13 @@ Plug '~/.fzf' | Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-dispatch'
+Plug 'jceb/vim-orgmode'
 
 Plug 'prabirshrestha/async.vim'
 "Plug 'prabirshrestha/vim-lsp'
 
 " language specific plugins
-"Plug 'davidhalter/jedi-vim'
 Plug 'fatih/vim-go'
 Plug 'itchyny/vim-haskell-indent'
 Plug 'rodjek/vim-puppet'
@@ -170,6 +169,9 @@ autocmd FileType python set textwidth=0
 autocmd FileType python set expandtab
 autocmd FileType python set autoindent
 autocmd FileType python set fileformat=unix
+
+au FileType python let b:dispatch = 'fli service test .'
+au FileType python nmap <leader>t :Dispatch!<CR>
 
 " ------ PHP Settings ------
 
