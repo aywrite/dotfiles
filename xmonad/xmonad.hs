@@ -85,6 +85,7 @@ myLockScreen        = "i3lock"
 myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
 myOtherStatusBar    = "~/.config/polybar/launch.sh"
+myTaskManager       = "emacs ~/org/inbox.org"
 
 ------------------------------------------------------------------------}}}
 -- Themes                                                               {{{
@@ -186,6 +187,7 @@ myManageHook =
     where
         manageSpecific = composeOne
             [ isChat -?> forceCenterFloat
+            , isTasks -?> forceCenterFloat
             , isDialog -?> doCenterFloat
             , isFullscreen -?> doFullFloat
             , isRole =? "pop-up" -?> doCenterFloat
@@ -247,6 +249,7 @@ myAdditionalKeys = [
     , ("M-S-s", spawn myStartupScript)
     , ("M-C-l", spawn myLockScreen)
     , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
+    , ("M-S-i", namedScratchpadAction scratchpads "tasks")
     , ("M-S-q", confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     -- navigation
     , ("M-h", windowGo L False)
@@ -337,11 +340,15 @@ projects =
 -- Scratch pads
 
 scratchpads =
-    [   (NS "chatwork"  myWorkChat isChat defaultFloating)
+    [ (NS "chatwork"  myWorkChat isChat defaultFloating),
+      (NS "tasks" myTaskManager isTasks defaultFloating)
     ] 
 
 chatWorkResource = "chat.tools.flnltd.com__home"
 isChat = (resource =? chatWorkResource)
+
+tasksResource = "emacs"
+isTasks = (resource =? tasksResource)
 
 ------------------------------------------------------------------------}}}
 -- Status bar                                                           {{{
