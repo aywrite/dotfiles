@@ -372,20 +372,22 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
    (quote
-    ("~/org/work.org" "~/org/sprint.org" "~/org/inbox.org" "~/org/notes.org" "~/org/scratch.org")))
+    ("~/org/home.org" "~/org/work.org" "~/org/sprint.org" "~/org/inbox.org" "~/org/notes.org" "~/org/scratch.org")))
  '(org-capture-templates
    (quote
-    (
-    ;; PHAB Todo (p)
-    ("p" "Phab TODO" entry
+    (("p" "Phab TODO" entry
       (file+headline "~/org/work.org" "Tasks")
       "* TODO %? [[https://phabricator.tools.flnltd.com/%^{Phabricator Item}][%\\1]]
       :LOGBOOK:
       - Created %U
       :END:" :empty-lines 1)
-
-    ;; Deploy (d)
-    ("d" "Deploy Service" entry
+     ("t" "General TODO" entry
+      (file+headline "~/org/home.org" "Tasks")
+      "* TODO %?
+      :LOGBOOK:
+      - Created %U
+      :END:" :empty-lines 1)
+     ("d" "Deploy Service" entry
       (file+headline "~/org/work.org" "Deployments")
       "* TODO Deploy %^{Version} to %^{Service} [/]
        - [ ] Dev
