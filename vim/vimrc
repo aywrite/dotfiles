@@ -40,6 +40,7 @@ Plug 'cespare/vim-toml'
 Plug 'hashivim/vim-terraform'
 Plug 'pangloss/vim-javascript'
 Plug 'jparise/vim-graphql'
+Plug 'ledger/vim-ledger'
 
 " --- language server ---
 set hidden
