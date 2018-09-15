@@ -43,3 +43,6 @@ alias git=git
 
 # character based diff of two files
 alias diffchar="git diff --word-diff=color --word-diff-regex=. --no-index"
+
+# use ripgrep instead of silversearcher
+alias ag=rg
