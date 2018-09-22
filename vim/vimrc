@@ -9,22 +9,20 @@ endif
 call plug#begin('~/.vim/plugged')
 
 " general plugins
+Plug '~/.fzf' | Plug 'junegunn/fzf.vim'
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/indentpython.vim'
-Plug 'scrooloose/syntastic'
-"Plug 'w0rp/ale'
+Plug 'w0rp/ale'
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
-Plug '~/.fzf' | Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-dispatch'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-dispatch'
 Plug 'jceb/vim-orgmode'
 
 Plug 'prabirshrestha/async.vim'
-"Plug 'prabirshrestha/vim-lsp'
 
 " language specific plugins
 Plug 'fatih/vim-go'
@@ -132,35 +130,11 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_enable_signs          = 1
-let g:syntastic_enable_highlighting   = 1
-let g:syntastic_cpp_check_header      = 1
-let g:syntastic_enable_balloons       = 1
-let g:syntastic_echo_current_error    = 1
-let g:syntastic_check_on_open         = 1
-let g:syntastic_check_on_wq           = 0
-let g:syntastic_error_symbol          = '!'
-let g:syntastic_warning_symbol        = '>'
-let g:syntastic_style_error_symbol    = 'X'
-let g:syntastic_style_warning_symbol  = '>'
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_javascript_checkers = ['eslint']
-
-" ALE settings
-let g:ale_fixers = {
-\   'javascript': ['eslint']
-\}
-
 " wrap errors at bottom of vim screen
 autocmd FileType qf setlocal wrap
 
 " ------ Python Settings ------
-" don't show the documentation window during jedi completion
-autocmd FileType python setlocal completeopt-=preview
-let g:jedi#show_call_signatures = "2"
-
+"
 " python syntax highlighting
 let python_highlight_all=1
 autocmd FileType python set tabstop=4
