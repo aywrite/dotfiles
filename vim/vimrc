@@ -261,3 +261,6 @@ au BufNewFile,BufRead *.go,*.go.gotmpl setlocal noet ts=4 sw=4 sts=4
 
 " ------ crontab Settings ------
 autocmd filetype crontab setlocal nobackup nowritebackup
+
+" ------ ledger settings -------
+autocmd BufNewFile,BufRead *.journal set filetype=ledger
