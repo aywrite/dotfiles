@@ -14,9 +14,11 @@ dirs_to_prepend=(
   "$HOME/.local/bin"
   "$HOME/dotfiles/bin"
   "$HOME/go/bin" # go binaries
+  "$HOME/bin"
   "$HOME/.cargo/bin" # rust binaries
   "$HOME/work/arcanist/arcanist/bin"
   "$HOME/tools/arcanist/bin"
+  "$HOME/tools/"
   "/usr/local/opt/bison/bin"
   "$HOME/.rbenv/bin"
 )

@@ -21,6 +21,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jceb/vim-orgmode'
+Plug 'bracki/vim-prometheus'
 
 Plug 'prabirshrestha/async.vim'
 
@@ -39,6 +40,7 @@ Plug 'hashivim/vim-terraform'
 Plug 'pangloss/vim-javascript'
 Plug 'jparise/vim-graphql'
 Plug 'ledger/vim-ledger'
+Plug 'ambv/black' " python auto-formating with python
 
 " --- language server ---
 set hidden
@@ -148,6 +150,9 @@ autocmd FileType python set fileformat=unix
 au FileType python let b:dispatch = 'fli service test .'
 au FileType python nmap <leader>t :Dispatch!<CR>
 
+" auto format on save
+"autocmd BufWritePre *.py execute ':Black'
+
 " ------ PHP Settings ------
 
 autocmd FileType php set tabstop=4
@@ -215,6 +220,7 @@ let g:rustfmt_autosave = 1
 let g:racer_cmd = "/Users/andrewwright/.cargo/bin/racer"
 
 " ------ go-lang Settings ------
+let g:go_version_warning = 0
 " treat .go.tmpl files as go files
 autocmd BufNewFile,BufRead *.go.tmpl set filetype=go
 
