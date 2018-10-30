@@ -29,6 +29,11 @@ ag-replace() {
 aws-ssh() {
   dns=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0 | awk '{print $7}') && ssh awright@$dns
 }
+#
+# AWS SSH searchable by tags
+aws-ssh-jump() {
+  dns=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0 | awk '{print $8}') && echo $dns && ssh -J awright@jumphost.fln.flnltd.com:22 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no awright@$dns
+}
 
 aws-ssh-rest_app() {
   dns=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:rest_app,rest_app_service:$2" | fzf --exit-0 | awk '{print $7}') && ssh $dns
