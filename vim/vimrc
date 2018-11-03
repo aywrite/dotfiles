@@ -10,6 +10,7 @@ call plug#begin('~/.vim/plugged')
 
 " general plugins
 Plug '~/.fzf' | Plug 'junegunn/fzf.vim'
+Plug 'airblade/vim-rooter'
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-scripts/indentpython.vim'
 Plug 'w0rp/ale'
@@ -54,15 +55,6 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ }
 
-" --- language server (vim-lsp) ---
-"if executable('rls')
-"    au User lsp_setup call lsp#register_server({
-"        \ 'name': 'rls',
-"        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-"        \ 'whitelist': ['rust'],
-"        \ })
-"endif
-
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 
@@ -106,11 +98,22 @@ syntax enable
 :noremap <Left> <nop>
 :noremap <Right> <nop>
 
+" linting
+let g:ale_rust_cargo_use_check = 1
+let g:ale_rust_cargo_check_all_targets = 1
+
 " remap leader
 let mapleader = ","
 
 " use fzf as ctl-p
 nnoremap <silent> <C-p> :Files<CR>
+nmap <leader>; :Buffers<CR>
+
+" use rg for grep
+if executable('rg')
+	set grepprg=rg\ --no-heading\ --vimgrep
+	set grepformat=%f:%l:%c:%m
+endif
 
 " vim theme (used with altercation/vim-colors-solarized)
 set background=dark
@@ -136,9 +139,10 @@ set statusline+=%*
 autocmd FileType qf setlocal wrap
 
 " ------ Python Settings ------
-"
+
 " python syntax highlighting
 let python_highlight_all=1
+
 autocmd FileType python set tabstop=4
 autocmd FileType python set softtabstop=4
 autocmd FileType python set shiftwidth=4
@@ -151,7 +155,8 @@ au FileType python let b:dispatch = 'fli service test .'
 au FileType python nmap <leader>t :Dispatch!<CR>
 
 " auto format on save
-"autocmd BufWritePre *.py execute ':Black'
+let g:black_linelength = 100
+autocmd BufWritePre *.py execute ':Black'
 
 " ------ PHP Settings ------
 
@@ -200,27 +205,21 @@ autocmd FileType cpp set shiftwidth=2
 autocmd BufNewFile,BufRead *xmobarrc set filetype=haskell
 
 " ------ Rust-lang Settings ------
-au FileType rust let b:dispatch = 'cargo test'
-au FileType rust nmap <leader>b :Dispatch cargo build<CR>
-au FileType rust nmap <leader>r :!cargo run<CR>
-au FileType rust nmap <leader>t :Dispatch<CR>
-au FileType rust nmap <leader>c :Dispatch cargo check<CR>
+autocmd FileType rust let b:dispatch = 'cargo test'
+autocmd FileType rust nmap <leader>b :Dispatch cargo build<CR>
+autocmd FileType rust nmap <leader>r :!cargo run<CR>
+autocmd FileType rust nmap <leader>t :Dispatch<CR>
+autocmd FileType rust nmap <leader>c :Dispatch cargo check<CR>
 
-au FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
-au FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
-"au FileType rust nmap <leader>g :LspDefinition<CR>
-"au FileType rust nmap <leader>d :LspHover<CR>
-"au FileType rust nmap <leader>f :LspDocumentFormat<CR>
-"au FileType rust nmap <leader>k :LspNextError<CR>
-"au FileType rust nmap <leader>j :LspPreviousError<CR>
+autocmd FileType rust nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
+autocmd FileType rust nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
 
 "nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-au FileType rust let g:syntastic_rust_checkers = ['rustc', 'clippy']
 let g:rustfmt_autosave = 1
 let g:racer_cmd = "/Users/andrewwright/.cargo/bin/racer"
 
 " ------ go-lang Settings ------
-let g:go_version_warning = 0
+"let g:go_version_warning = 0
 " treat .go.tmpl files as go files
 autocmd BufNewFile,BufRead *.go.tmpl set filetype=go
 
