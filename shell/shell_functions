@@ -17,6 +17,11 @@ fd() {
   cd "$dir"
 }
 
+# save screen capture of selection to captures directory
+scs() {
+   scrot -s '%Y-%m-%d_$wx$h_scrot.png' -e 'mv $f ~/captures/'
+}
+
 # find files matching $1 and replace all $1 with $2 making backups of changed files (.back)
 # forward slashed must be escaped.
 ag-replace() {
