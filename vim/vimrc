@@ -12,36 +12,35 @@ call plug#begin('~/.vim/plugged')
 Plug '~/.fzf' | Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-rooter'
 Plug 'altercation/vim-colors-solarized'
-Plug 'vim-scripts/indentpython.vim'
-Plug 'w0rp/ale'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'ervandew/supertab'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
+Plug 'prabirshrestha/async.vim'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'jceb/vim-orgmode'
-Plug 'bracki/vim-prometheus'
-
-Plug 'prabirshrestha/async.vim'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'w0rp/ale'
 
 " language specific plugins
+Plug 'ambv/black' " python auto-formating with python
+Plug 'bracki/vim-prometheus'
+Plug 'cespare/vim-toml'
+Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
 Plug 'fatih/vim-go'
+Plug 'hashivim/vim-terraform'
 Plug 'itchyny/vim-haskell-indent'
+Plug 'jparise/vim-graphql'
+Plug 'kylef/apiblueprint.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'ledger/vim-ledger'
+Plug 'martinda/Jenkinsfile-vim-syntax'
+Plug 'pangloss/vim-javascript'
 Plug 'rodjek/vim-puppet'
 Plug 'rust-lang/rust.vim'
 Plug 'solarnz/arcanist.vim'
 Plug 'solarnz/thrift.vim'
-Plug 'kylef/apiblueprint.vim'
-Plug 'digitaltoad/vim-pug' " syntax highlighting for jade
-Plug 'martinda/Jenkinsfile-vim-syntax'
-Plug 'cespare/vim-toml'
-Plug 'hashivim/vim-terraform'
-Plug 'pangloss/vim-javascript'
-Plug 'jparise/vim-graphql'
-Plug 'ledger/vim-ledger'
-Plug 'ambv/black' " python auto-formating with python
 
 " --- language server ---
 set hidden
@@ -52,6 +51,7 @@ Plug 'autozimu/LanguageClient-neovim', {
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ }
 
@@ -155,8 +155,8 @@ au FileType python let b:dispatch = 'fli service test .'
 au FileType python nmap <leader>t :Dispatch!<CR>
 
 " auto format on save
-let g:black_linelength = 100
-autocmd BufWritePre *.py execute ':Black'
+"let g:black_linelength = 100
+"autocmd BufWritePre *.py execute ':Black'
 
 " ------ PHP Settings ------
 
@@ -172,6 +172,15 @@ autocmd FileType javascript set softtabstop=2
 autocmd FileType javascript set shiftwidth=2
 autocmd FileType javascript set expandtab
 autocmd FileType javascript set autoindent
+
+" ------ Typescript -------
+autocmd FileType typescript nmap <leader>g :call LanguageClient_textDocument_definition()<CR>
+autocmd FileType typescript nmap <leader>d :call LanguageClient_textDocument_hover()<CR>
+autocmd FileType typescript set tabstop=2
+autocmd FileType typescript set softtabstop=2
+autocmd FileType typescript set shiftwidth=2
+autocmd FileType typescript set expandtab
+autocmd FileType typescript set autoindent
 
 " ------ Jenkinsfile Settings ------
 " treat Jenkinsfile.* files as Jenkinsfile files
