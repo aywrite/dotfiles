@@ -41,6 +41,7 @@ Plug 'rodjek/vim-puppet'
 Plug 'rust-lang/rust.vim'
 Plug 'solarnz/arcanist.vim'
 Plug 'solarnz/thrift.vim'
+Plug 'nathangrigg/vim-beancount'
 
 " --- language server ---
 set hidden
@@ -49,7 +50,7 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'rust': ['rustup', 'run', 'nightly-2019-02-08', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
@@ -165,6 +166,7 @@ autocmd FileType php set softtabstop=4
 autocmd FileType php set shiftwidth=4
 autocmd FileType php set expandtab
 autocmd FileType php set autoindent
+let g:ale_php_phpstan_use_global = 1
 
 " ------ JS Settings ------
 autocmd FileType javascript set tabstop=2

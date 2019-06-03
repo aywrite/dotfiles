@@ -16,6 +16,7 @@ dirs_to_prepend=(
   "$HOME/go/bin" # go binaries
   "$HOME/bin"
   "$HOME/.cargo/bin" # rust binaries
+  "$HOME/.yarn/bin" # rust binaries
   "$HOME/work/arcanist/arcanist/bin"
   "$HOME/tools/arcanist/bin"
   "$HOME/tools/"
