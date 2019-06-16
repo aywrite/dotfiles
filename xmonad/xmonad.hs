@@ -85,7 +85,7 @@ myLockScreen        = "i3lock"
 myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
 myOtherStatusBar    = "~/.config/polybar/launch.sh"
-myTaskManager       = "emacs ~/org/inbox.org"
+myTaskManager       = myPersonalBrowser ++ " --app=https://todoist.com"
 
 ------------------------------------------------------------------------}}}
 -- Themes                                                               {{{
@@ -347,7 +347,7 @@ scratchpads =
 chatWorkResource = "chat.tools.flnltd.com__home"
 isChat = (resource =? chatWorkResource)
 
-tasksResource = "emacs"
+tasksResource = "todoist.com"
 isTasks = (resource =? tasksResource)
 
 ------------------------------------------------------------------------}}}
