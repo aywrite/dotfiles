@@ -86,6 +86,7 @@ myStartupScript     = "bash /home/andrewwright/.xinitrc"
 myStatusBar         = "xmobar"
 myOtherStatusBar    = "~/.config/polybar/launch.sh"
 myTaskManager       = myPersonalBrowser ++ " --app=https://todoist.com"
+myEmacs             = "emacs ~/org"
 
 ------------------------------------------------------------------------}}}
 -- Themes                                                               {{{
@@ -250,6 +251,7 @@ myAdditionalKeys = [
     , ("M-C-l", spawn myLockScreen)
     , ("M-S-t", namedScratchpadAction scratchpads "chatwork")
     , ("M-S-i", namedScratchpadAction scratchpads "tasks")
+    , ("M-S-e", namedScratchpadAction scratchpads "emacs")
     , ("M-S-q", confirmPrompt hotPromptTheme "Quit XMonad" $ io (exitWith ExitSuccess))
     -- navigation
     , ("M-h", windowGo L False)
@@ -341,7 +343,8 @@ projects =
 
 scratchpads =
     [ (NS "chatwork"  myWorkChat isChat defaultFloating),
-      (NS "tasks" myTaskManager isTasks defaultFloating)
+      (NS "tasks" myTaskManager isTasks defaultFloating),
+      (NS "emacs" myEmacs isEmacs defaultFloating)
     ] 
 
 chatWorkResource = "chat.tools.flnltd.com__home"
@@ -349,6 +352,9 @@ isChat = (resource =? chatWorkResource)
 
 tasksResource = "todoist.com"
 isTasks = (resource =? tasksResource)
+
+emacsResource = "emacs"
+isEmacs = (resource =? emacsResource)
 
 ------------------------------------------------------------------------}}}
 -- Status bar                                                           {{{
