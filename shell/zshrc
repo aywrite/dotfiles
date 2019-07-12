@@ -10,6 +10,7 @@ dirs_to_prepend=(
   "/usr/local/git/bin"
   "/usr/local/"
   "/usr/lib/go-1.10/bin"
+  "/usr/local/go/bin"
   "/usr/local/mysql/bin"
   "$HOME/.local/bin"
   "$HOME/dotfiles/bin"

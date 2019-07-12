@@ -28,27 +28,41 @@ ag-replace() {
   ag $1 --files-with-matches | xargs -I {} sed -i '.back' -e "s/$1/$2/g" {}
 }
 
-# AWS commands
+# ----- AWS commands ---------
 # requires yawsi (go get github.com/amitsaha/yawsi)
 
 # AWS SSH searchable by tags
+# usage:
+# aws-ssh dev
+# aws-ssh dev projects_dao
+# aws-ssh -i i-00827c6b810d8a2f2
 aws-ssh() {
-  host=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0)
-  ip=$(echo $host | awk -F ":" '{print $5}' | awk '{$1=$1;print}')
-  dns=$(echo $host | awk -F ":" '{print $4}' | awk '{$1=$1;print}')
-  if ! [ -z "$dns" ]; then
-    ssh awright@$dns
+  profile=$1
+  filter=""
+  shift
+  while (( $# > 0)); do
+    case $1 in
+      -i|--instance) filter="--instance-id=$2"
+          break
+          ;;
+      *) filter="--tags=role:$1"
+          break
+    esac
+    shift
+  done
+  # if no role or instance is provided then fetches all instances, this is quite slow though
+  host=$(AWS_PROFILE=$profile yawsi2 ec2 describe-instances $filter --list-format "{{.PrivateIPAddresses}} : {{.PublicIP}}")
+  private_ip=$(echo $host | awk -F ":" '{print $1}' | awk '{$1=$1;print}' | tr -d "[]")
+  public_ip=$(echo $host | awk -F ":" '{print $2}' | awk '{$1=$1;print}' | tr -d "[]")
+  if ! [ -z "$public_ip" ]; then
+    ssh awright@$public_ip
   else
-    ssh awright@$ip
+    ssh awright@$private_ip
   fi
 }
 
-# SSH directly to an instance
-sshi() {
-  dns=$(AWS_PROFILE=$1 yawsi ec2 | grep $2 | awk '{print $7}') && ssh $dns
-}
-
 # launch more instances like the selected one
+# FIXME update for yawsi2
 aws-launch-more() {
   id=$(AWS_PROFILE=$1 yawsi ec2 list-instances --tags="role:$2" | fzf --exit-0 | awk '{print $1}') && AWS_PROFILE=$1 yawsi ec2 launch-more-like $id --edit-user-data
 }
