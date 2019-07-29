@@ -326,6 +326,12 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   ;; use "jk" instead of ESC
   (setq-default evil-escape-key-sequence "jk")
+  ;; Custom todo keywords
+  (with-eval-after-load 'org
+    (setq org-todo-keywords
+         '((sequence "TODO(t!)" "INPROGRESS(p!)" "WAITING(w@/!)""|" "DONE(d!)" "CANCELLED(c@)"))))
+  ;; Log into a LOGGING drawer
+  (setq org-log-into-drawer "LOGGING")
   ;; VIM style window navigation
   (define-key evil-normal-state-map (kbd "C-h") #'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-j") #'evil-window-down)
@@ -351,6 +357,8 @@ you should place your code here."
   (add-hook 'Info-mode-hook 'set-buffer-variable-pitch)
   ;; use smart quotes when exporting from org mode
   (setq org-export-with-smart-quotes t)
+  ;; enforce dependencies in todos
+  (setq org-enforce-todo-dependencies t)
   ;; enable visual line mode by default for text files
   (add-hook 'text-mode-hook #'visual-line-mode)
 
