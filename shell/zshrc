@@ -113,3 +113,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [ -e /home/andrewwright/.nix-profile/etc/profile.d/nix.sh ]; then . /home/andrewwright/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
