@@ -42,6 +42,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'solarnz/arcanist.vim'
 Plug 'solarnz/thrift.vim'
 Plug 'nathangrigg/vim-beancount'
+Plug 'LnL7/vim-nix'
 
 " --- language server ---
 set hidden
